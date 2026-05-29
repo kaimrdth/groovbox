@@ -1,0 +1,4300 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>◌</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --void: #070806;
+      --case: #1d2119;
+      --case-hi: #343a2e;
+      --case-lo: #0a0b09;
+      --edge: #080906;
+      --brass: #c6a84b;
+      --ember: #ff5c2f;
+      --moss: #7fba63;
+      --jade: #42e7bb;
+      --bone: #d7cfad;
+      --blue: #6b7dff;
+      --rose: #d74b80;
+      --shadow: rgba(0, 0, 0, .58);
+      --step: rgba(216, 207, 173, .15);
+      --rub: rgba(255,255,255,.035);
+      font-family: ui-sans-serif, system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      overflow-x: hidden;
+      background:
+        radial-gradient(circle at 48% -18%, rgba(198, 168, 75, .2), transparent 34rem),
+        radial-gradient(circle at 22% 82%, rgba(66, 231, 187, .07), transparent 24rem),
+        radial-gradient(circle at 78% 70%, rgba(255, 92, 47, .045), transparent 24rem),
+        linear-gradient(145deg, #11130f, #050604 70%);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      width: min(1180px, 92vw);
+      height: min(180px, 18vw);
+      left: 50%;
+      top: calc(50% + 315px);
+      transform: translateX(-50%) rotate(-1deg);
+      border-radius: 50%;
+      background: radial-gradient(ellipse, rgba(0,0,0,.78), rgba(0,0,0,.46) 38%, transparent 72%);
+      filter: blur(18px);
+      pointer-events: none;
+    }
+
+    body {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: clamp(12px, 2vw, 28px);
+      perspective: 1200px;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button, input {
+      appearance: none;
+      border: 0;
+      font: inherit;
+      color: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    .machine {
+      width: min(1050px, 100%);
+      aspect-ratio: 1.55;
+      min-height: 610px;
+      position: relative;
+      padding: clamp(16px, 2.2vw, 28px);
+      border-radius: 26px;
+      background:
+        radial-gradient(circle at 14% 9%, rgba(255,255,255,.15), transparent 18%),
+        linear-gradient(90deg, rgba(255,255,255,.09), transparent 3%, transparent 96%, rgba(0,0,0,.28)),
+        linear-gradient(135deg, rgba(255,255,255,.14), transparent 18%),
+        repeating-linear-gradient(108deg, transparent 0 15px, rgba(255,255,255,.018) 16px 17px, transparent 18px 42px),
+        linear-gradient(165deg, #424a39, var(--case) 38%, #12150f 74%, #060705);
+      box-shadow:
+        0 24px 0 #090a07,
+        0 32px 0 #050604,
+        0 74px 105px rgba(0,0,0,.72),
+        -18px 36px 58px rgba(0,0,0,.46),
+        inset 0 2px 1px rgba(255,255,255,.22),
+        inset 0 7px 10px rgba(255,255,255,.07),
+        inset 0 22px 22px rgba(255,255,255,.045),
+        inset 0 -22px 28px rgba(0,0,0,.62),
+        0 0 0 2px #050604,
+        0 0 0 8px #151812,
+        0 0 0 11px #050604;
+      transform: rotateX(8deg) rotateZ(-1.2deg);
+      transform-style: preserve-3d;
+    }
+
+    .machine::before,
+    .machine::after {
+      content: "";
+      position: absolute;
+      inset: 12px;
+      border-radius: 18px;
+      pointer-events: none;
+    }
+
+    .machine::before {
+      border: 1px solid rgba(215, 207, 173, .12);
+      box-shadow:
+        inset 0 0 0 4px rgba(255,255,255,.018),
+        inset 0 0 0 9px rgba(0,0,0,.18),
+        inset 0 0 34px rgba(0,0,0,.38);
+    }
+
+    .machine::after {
+      background:
+        radial-gradient(circle at 18% 12%, rgba(255,255,255,.16), transparent 11%),
+        linear-gradient(115deg, transparent 0 48%, rgba(255,255,255,.08) 49%, transparent 54%),
+        linear-gradient(180deg, rgba(255,255,255,.08), transparent 9%, transparent 72%, rgba(0,0,0,.42)),
+        repeating-linear-gradient(90deg, transparent 0 28px, rgba(255,255,255,.018) 29px 30px),
+        repeating-linear-gradient(0deg, transparent 0 24px, rgba(0,0,0,.09) 25px 26px);
+      mix-blend-mode: soft-light;
+      opacity: .72;
+    }
+
+    .rim {
+      position: absolute;
+      pointer-events: none;
+      z-index: 0;
+      border-radius: inherit;
+    }
+
+    .rim.left,
+    .rim.right {
+      top: 20px;
+      bottom: -42px;
+      width: 38px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.12), transparent 18%, rgba(0,0,0,.34) 82%),
+        linear-gradient(90deg, #050604, #20251b 38%, #11140e 62%, #030403);
+      box-shadow:
+        inset 2px 0 2px rgba(255,255,255,.08),
+        inset -4px 0 10px rgba(0,0,0,.62),
+        0 18px 26px rgba(0,0,0,.54);
+    }
+
+    .rim.left {
+      left: -18px;
+      transform: skewY(10deg);
+    }
+
+    .rim.right {
+      right: -18px;
+      transform: skewY(-10deg);
+    }
+
+    .rim.front {
+      left: 26px;
+      right: 26px;
+      bottom: -39px;
+      height: 58px;
+      border-radius: 0 0 28px 28px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.05), transparent 18%),
+        linear-gradient(180deg, #20251b, #080906 72%),
+        repeating-linear-gradient(90deg, rgba(255,255,255,.035) 0 1px, transparent 1px 36px);
+      box-shadow:
+        inset 0 2px 0 rgba(255,255,255,.1),
+        inset 0 -14px 18px rgba(0,0,0,.64),
+        0 19px 28px rgba(0,0,0,.62);
+    }
+
+    .feet {
+      position: absolute;
+      left: 10%;
+      right: 10%;
+      bottom: -55px;
+      display: flex;
+      justify-content: space-between;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .foot {
+      width: clamp(84px, 12vw, 138px);
+      height: 24px;
+      border-radius: 0 0 18px 18px;
+      background: linear-gradient(180deg, #0e100b, #020302);
+      box-shadow: 0 13px 18px rgba(0,0,0,.62), inset 0 2px 1px rgba(255,255,255,.05);
+    }
+
+    .ports {
+      position: absolute;
+      top: -22px;
+      right: 16%;
+      display: flex;
+      gap: 12px;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .port {
+      width: 36px;
+      height: 22px;
+      border-radius: 9px 9px 3px 3px;
+      background:
+        radial-gradient(circle at 50% 72%, #020302 0 34%, #303529 36% 55%, #070806 57%),
+        linear-gradient(180deg, #252a20, #080906);
+      box-shadow: inset 0 2px 1px rgba(255,255,255,.08), 0 -4px 10px rgba(0,0,0,.35);
+    }
+
+    .port::after {
+      content: "";
+      display: block;
+      width: 16px;
+      height: 16px;
+      margin: 4px auto 0;
+      border-radius: 50%;
+      background: radial-gradient(circle at 50% 58%, #010201 0 42%, #151812 43% 58%, #030403 60%);
+      box-shadow: inset 0 2px 2px rgba(255,255,255,.06);
+    }
+
+    .screws {
+      position: absolute;
+      inset: 19px;
+      pointer-events: none;
+      z-index: 4;
+    }
+
+    .screw {
+      width: 18px;
+      height: 18px;
+      position: absolute;
+      border-radius: 50%;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.28), transparent 42%),
+        radial-gradient(circle at 60% 65%, #10120d, #373d30 66%, #090a07 70%);
+      box-shadow: inset 0 2px 2px rgba(255,255,255,.1), inset 0 -3px 3px rgba(0,0,0,.7);
+    }
+
+    .screw::after {
+      content: "";
+      position: absolute;
+      width: 11px;
+      height: 2px;
+      left: 3.5px;
+      top: 8px;
+      background: rgba(0,0,0,.72);
+      transform: rotate(var(--r));
+      border-radius: 4px;
+    }
+
+    .screw:nth-child(1) { left: 0; top: 0; --r: 22deg; }
+    .screw:nth-child(2) { right: 0; top: 0; --r: -28deg; }
+    .screw:nth-child(3) { left: 0; bottom: 0; --r: -10deg; }
+    .screw:nth-child(4) { right: 0; bottom: 0; --r: 45deg; }
+
+    .surface {
+      height: 100%;
+      display: grid;
+      grid-template-columns: .85fr 1.2fr;
+      grid-template-rows: .7fr .9fr .34fr;
+      gap: clamp(12px, 1.8vw, 20px);
+      position: relative;
+      z-index: 1;
+      transform: translateZ(16px);
+    }
+
+    .well,
+    .matrix,
+    .plate,
+    .banks,
+    .glyphs {
+      border-radius: 15px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.045), transparent 10%, transparent 86%, rgba(0,0,0,.46)),
+        linear-gradient(145deg, rgba(255,255,255,.07), transparent 28%),
+        radial-gradient(circle at 20% 10%, rgba(255,255,255,.05), transparent 28%),
+        linear-gradient(160deg, #151811, #0c0e0a);
+      box-shadow:
+        0 7px 0 #060705,
+        0 15px 20px rgba(0,0,0,.38),
+        0 1px 0 rgba(255,255,255,.06),
+        inset 0 0 0 1px rgba(0,0,0,.6),
+        inset 0 0 0 5px rgba(255,255,255,.018),
+        inset 0 2px 2px rgba(255,255,255,.09),
+        inset 0 -10px 16px rgba(0,0,0,.54),
+        0 16px 24px rgba(0,0,0,.42);
+      border: 1px solid rgba(215,207,173,.12);
+      position: relative;
+    }
+
+    .well {
+      padding: clamp(12px, 1.8vw, 18px);
+      display: grid;
+      grid-template-rows: .9fr .72fr;
+      gap: 14px;
+    }
+
+    .orbital {
+      position: relative;
+      border-radius: 14px;
+      background:
+        radial-gradient(circle at 50% 48%, rgba(66,231,187,.1), transparent 32%),
+        radial-gradient(circle, #080906 0 52%, #1c2119 53% 56%, #090a07 57%);
+      box-shadow:
+        0 8px 0 #050604,
+        0 16px 16px rgba(0,0,0,.34),
+        inset 0 0 0 1px rgba(215,207,173,.12),
+        inset 0 0 0 8px rgba(0,0,0,.28),
+        inset 0 0 34px rgba(0,0,0,.8);
+      overflow: hidden;
+    }
+
+    .orbital::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: none;
+      pointer-events: none;
+    }
+
+    .halo {
+      position: absolute;
+      inset: 13%;
+      border-radius: 50%;
+      border: 1px solid rgba(198,168,75,.35);
+      box-shadow: 0 0 20px rgba(198,168,75,.18);
+      animation: drift 13s linear infinite;
+    }
+
+    .halo:nth-child(2) {
+      inset: 25% 9%;
+      border-color: rgba(66,231,187,.26);
+      transform: rotate(62deg);
+      animation-duration: 17s;
+      animation-direction: reverse;
+    }
+
+    .halo:nth-child(3) {
+      inset: 7% 28%;
+      border-color: rgba(215,207,173,.22);
+      transform: rotate(-28deg);
+      animation-duration: 23s;
+    }
+
+    @keyframes drift {
+      to { rotate: 360deg; }
+    }
+
+    .eye {
+      position: absolute;
+      inset: 35%;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 38% 32%, rgba(255,255,255,.72), transparent 9%),
+        radial-gradient(circle, var(--jade), #174f43 52%, #06110e 62%);
+      box-shadow:
+        0 0 28px rgba(66,231,187,.34),
+        inset 0 -8px 12px rgba(0,0,0,.55);
+      transition: transform .08s ease, filter .08s ease;
+    }
+
+    .machine.playing .eye {
+      filter: brightness(1.35);
+      animation: breathe .6s ease-in-out infinite alternate;
+    }
+
+    @keyframes breathe {
+      from { transform: scale(.95); }
+      to { transform: scale(1.08); }
+    }
+
+    .transport {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 10px;
+    }
+
+    .glyph-button {
+      min-height: 62px;
+      border-radius: 13px;
+      position: relative;
+      background:
+        radial-gradient(circle at 34% 16%, rgba(255,255,255,.2), transparent 18%),
+        linear-gradient(145deg, rgba(255,255,255,.13), transparent 38%),
+        linear-gradient(180deg, #3c4435, #171a12 72%, #080906);
+      box-shadow:
+        0 8px 0 #050604,
+        0 14px 18px rgba(0,0,0,.32),
+        inset 0 0 0 1px rgba(255,255,255,.06),
+        inset 3px 0 3px rgba(255,255,255,.04),
+        inset -5px 0 7px rgba(0,0,0,.34),
+        inset 0 2px 1px rgba(255,255,255,.18),
+        inset 0 -6px 12px rgba(0,0,0,.45);
+      transition: transform .08s ease, box-shadow .08s ease, filter .12s ease;
+    }
+
+    .glyph-button:active,
+    .glyph-button.hot {
+      transform: translateY(5px);
+      box-shadow:
+        0 2px 0 #050604,
+        0 7px 10px rgba(0,0,0,.32),
+        inset 0 2px 1px rgba(255,255,255,.12),
+        inset 0 -4px 10px rgba(0,0,0,.52);
+    }
+
+    .glyph-button::before,
+    .glyph-button::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      margin: auto;
+    }
+
+    .play::before {
+      width: 0;
+      height: 0;
+      border-top: 15px solid transparent;
+      border-bottom: 15px solid transparent;
+      border-left: 24px solid var(--jade);
+      filter: drop-shadow(0 0 10px rgba(66,231,187,.5));
+    }
+
+    .stop::before {
+      width: 26px;
+      height: 26px;
+      background: var(--ember);
+      box-shadow: 0 0 12px rgba(255,92,47,.44);
+    }
+
+    .mist::before {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 50% 50%, transparent 0 36%, var(--brass) 38% 45%, transparent 47%),
+        conic-gradient(from 20deg, transparent 0 12%, var(--brass) 13% 20%, transparent 21% 45%, var(--brass) 46% 55%, transparent 56% 76%, var(--brass) 77% 84%, transparent 85%);
+      filter: drop-shadow(0 0 10px rgba(198,168,75,.38));
+    }
+
+    .void::before {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle, transparent 0 34%, var(--rose) 36% 45%, transparent 47%),
+        linear-gradient(var(--rose), var(--rose));
+      box-shadow: 0 0 12px rgba(215,75,128,.38);
+      clip-path: polygon(46% 0,54% 0,54% 46%,100% 46%,100% 54%,54% 54%,54% 100%,46% 100%,46% 54%,0 54%,0 46%,46% 46%);
+    }
+
+    .coil::before {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background:
+        conic-gradient(from 0deg, transparent 0 12%, var(--moss) 13% 22%, transparent 23% 35%, var(--moss) 36% 48%, transparent 49% 63%, var(--moss) 64% 76%, transparent 77%);
+      filter: drop-shadow(0 0 10px rgba(127,186,99,.4));
+    }
+
+    .coil::after {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: var(--moss);
+      box-shadow: 0 0 12px rgba(127,186,99,.55);
+    }
+
+    .blade::before {
+      width: 34px;
+      height: 34px;
+      background: var(--blue);
+      clip-path: polygon(50% 0,62% 34%,98% 38%,70% 58%,80% 94%,50% 73%,20% 94%,30% 58%,2% 38%,38% 34%);
+      filter: drop-shadow(0 0 10px rgba(107,125,255,.44));
+    }
+
+    .matrix {
+      grid-column: 2;
+      grid-row: 1 / 4;
+      padding: clamp(12px, 1.8vw, 20px);
+      display: grid;
+      grid-template-rows: repeat(4, 1fr);
+      gap: clamp(9px, 1.4vw, 15px);
+      position: relative;
+    }
+
+    .matrix::before {
+      content: "";
+      position: absolute;
+      inset: 8px;
+      border-radius: 12px;
+      border: 1px solid rgba(0,0,0,.52);
+      box-shadow: inset 0 0 24px rgba(0,0,0,.42);
+      pointer-events: none;
+    }
+
+    .matrix::after {
+      content: "";
+      position: absolute;
+      left: 12px;
+      right: 12px;
+      bottom: 8px;
+      height: 11px;
+      border-radius: 999px;
+      background:
+        repeating-linear-gradient(90deg, rgba(215,207,173,.2) 0 48px, transparent 49px 62px),
+        linear-gradient(180deg, rgba(255,255,255,.08), rgba(0,0,0,.28));
+      box-shadow: inset 0 1px 1px rgba(255,255,255,.16), inset 0 -3px 5px rgba(0,0,0,.5);
+      opacity: .62;
+      pointer-events: none;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: minmax(58px, .46fr) repeat(16, 1fr);
+      gap: clamp(5px, .7vw, 9px);
+      align-items: center;
+    }
+
+    .voice {
+      height: 100%;
+      min-height: 58px;
+      border-radius: 12px;
+      position: relative;
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.08), transparent 16%, transparent 78%, rgba(0,0,0,.5)),
+        radial-gradient(circle at 35% 25%, rgba(255,255,255,.18), transparent 18%),
+        radial-gradient(circle at 50% 42%, color-mix(in srgb, var(--c), white 12%), var(--c) 36%, #10120d 39%),
+        linear-gradient(145deg, #2a3024, #11140e);
+      box-shadow:
+        0 10px 0 #050604,
+        0 16px 18px rgba(0,0,0,.32),
+        inset 0 0 0 1px rgba(255,255,255,.07),
+        inset 0 2px 3px rgba(255,255,255,.18),
+        inset 0 -10px 13px rgba(0,0,0,.54);
+    }
+
+    .voice::before {
+      content: "";
+      position: absolute;
+      inset: 18%;
+      background: rgba(0,0,0,.62);
+      clip-path: var(--shape);
+      box-shadow: inset 0 0 0 999px rgba(0,0,0,.3);
+    }
+
+    .voice.selected {
+      filter: saturate(1.3) brightness(1.13);
+      box-shadow:
+        0 7px 0 #050604,
+        0 0 22px color-mix(in srgb, var(--c), transparent 35%),
+        inset 0 2px 3px rgba(255,255,255,.2),
+        inset 0 -10px 13px rgba(0,0,0,.54);
+    }
+
+    .step {
+      width: 100%;
+      height: 100%;
+      min-height: 58px;
+      border-radius: 10px;
+      position: relative;
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.08), transparent 18%, transparent 78%, rgba(0,0,0,.52)),
+        radial-gradient(circle at 44% 23%, rgba(255,255,255,.08), transparent 20%),
+        linear-gradient(145deg, rgba(255,255,255,.11), transparent 34%),
+        linear-gradient(180deg, #30362a, #14170f 72%, #070806);
+      box-shadow:
+        0 9px 0 #050604,
+        0 15px 16px rgba(0,0,0,.32),
+        inset 0 0 0 1px rgba(255,255,255,.055),
+        inset 2px 0 3px rgba(255,255,255,.035),
+        inset -4px 0 6px rgba(0,0,0,.46),
+        inset 0 2px 1px rgba(255,255,255,.12),
+        inset 0 -8px 10px rgba(0,0,0,.58);
+    }
+
+    .step::before {
+      content: "";
+      position: absolute;
+      inset: 38%;
+      border-radius: 50%;
+      background: rgba(215,207,173,.28);
+      box-shadow: 0 0 0 1px rgba(0,0,0,.3);
+    }
+
+    .step.on {
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.1), transparent 18%, transparent 78%, rgba(0,0,0,.45)),
+        radial-gradient(circle at 50% 36%, color-mix(in srgb, var(--c), white 25%), var(--c) 32%, transparent 34%),
+        linear-gradient(145deg, rgba(255,255,255,.16), transparent 34%),
+        linear-gradient(180deg, #374030, #14170f 72%, #060705);
+    }
+
+    .step.on::before {
+      inset: 28%;
+      background: var(--c);
+      box-shadow: 0 0 18px color-mix(in srgb, var(--c), transparent 10%);
+    }
+
+    .step.accent::after {
+      content: "";
+      position: absolute;
+      inset: 18%;
+      border: 2px solid color-mix(in srgb, var(--c), white 25%);
+      border-radius: 28%;
+      transform: rotate(45deg);
+      box-shadow: 0 0 10px color-mix(in srgb, var(--c), transparent 22%);
+    }
+
+    .step.now {
+      outline: 2px solid rgba(215,207,173,.58);
+      outline-offset: 2px;
+      filter: brightness(1.18);
+    }
+
+    .step:active,
+    .voice:active {
+      transform: translateY(4px);
+      box-shadow:
+        0 2px 0 #050604,
+        inset 0 2px 1px rgba(255,255,255,.1),
+        inset 0 -4px 9px rgba(0,0,0,.6);
+    }
+
+    .plate {
+      grid-column: 1;
+      grid-row: 2;
+      padding: clamp(12px, 1.8vw, 18px);
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      gap: 12px;
+      align-items: center;
+    }
+
+    .dial {
+      aspect-ratio: 1;
+      min-width: 0;
+      position: relative;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 32% 20%, rgba(255,255,255,.2), transparent 14%),
+        conic-gradient(from 0deg, rgba(0,0,0,.28), transparent 10%, transparent 42%, rgba(255,255,255,.12) 48%, transparent 60%, rgba(0,0,0,.4) 78%, transparent),
+        conic-gradient(from -132deg, var(--jade) 0 var(--a), rgba(215,207,173,.12) var(--a) 74%, transparent 74%),
+        radial-gradient(circle, #4a5240 0 42%, #151811 43% 60%, #050604 61%);
+      box-shadow:
+        0 13px 0 #050604,
+        0 25px 28px rgba(0,0,0,.52),
+        0 0 0 5px rgba(0,0,0,.2),
+        inset 0 0 0 1px rgba(255,255,255,.08),
+        inset 7px 0 8px rgba(255,255,255,.05),
+        inset -10px 0 10px rgba(0,0,0,.38),
+        inset 0 2px 2px rgba(255,255,255,.2),
+        inset 0 -15px 16px rgba(0,0,0,.66);
+      cursor: ns-resize;
+    }
+
+    .dial::before {
+      content: "";
+      position: absolute;
+      width: 8%;
+      height: 33%;
+      left: 46%;
+      top: 11%;
+      border-radius: 999px;
+      background: var(--bone);
+      box-shadow:
+        0 0 10px rgba(215,207,173,.35),
+        2px 5px 4px rgba(0,0,0,.35);
+      transform-origin: 50% 118%;
+      transform: rotate(var(--r));
+    }
+
+    .dial::after {
+      content: "";
+      position: absolute;
+      inset: 31%;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 36% 30%, rgba(255,255,255,.22), transparent 20%),
+        radial-gradient(circle at 50% 60%, #050604 0 28%, transparent 29%),
+        linear-gradient(145deg, #12150f, #282e22);
+      box-shadow:
+        inset 0 2px 4px rgba(255,255,255,.08),
+        inset 0 -7px 9px rgba(0,0,0,.72),
+        0 2px 3px rgba(255,255,255,.04);
+    }
+
+    .banks {
+      grid-column: 1;
+      grid-row: 3;
+      padding: 12px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .bank {
+      min-height: 58px;
+      border-radius: 12px;
+      position: relative;
+      background:
+        radial-gradient(circle at 34% 18%, rgba(255,255,255,.14), transparent 16%),
+        linear-gradient(145deg, rgba(255,255,255,.1), transparent 34%),
+        linear-gradient(180deg, #31382a, #10120d 74%, #050604);
+      box-shadow:
+        0 9px 0 #050604,
+        0 15px 17px rgba(0,0,0,.34),
+        inset 0 0 0 1px rgba(255,255,255,.06),
+        inset 0 2px 1px rgba(255,255,255,.12),
+        inset 0 -7px 11px rgba(0,0,0,.48);
+    }
+
+    .bank::before {
+      content: "";
+      position: absolute;
+      inset: 25%;
+      border-radius: var(--bank-radius, 50%);
+      border: 2px solid rgba(215,207,173,.45);
+      transform: rotate(var(--bank-turn, 0deg));
+    }
+
+    .bank.active {
+      background:
+        radial-gradient(circle at 50% 48%, rgba(198,168,75,.6), transparent 34%),
+        linear-gradient(180deg, #31372a, #10120d);
+    }
+
+    .bank.active::before {
+      border-color: var(--brass);
+      box-shadow: 0 0 14px rgba(198,168,75,.48);
+    }
+
+    .glyphs {
+      position: absolute;
+      left: clamp(22px, 2.6vw, 34px);
+      top: clamp(22px, 2.6vw, 34px);
+      width: min(250px, 25vw);
+      padding: 10px;
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 6px;
+      align-content: center;
+      opacity: .34;
+      pointer-events: none;
+      transform: translateZ(8px);
+    }
+
+    .sigil {
+      aspect-ratio: 1;
+      border-radius: 8px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,.1), transparent 38%),
+        linear-gradient(180deg, #272c21, #0f110c);
+      box-shadow:
+        0 5px 0 #050604,
+        inset 0 1px 1px rgba(255,255,255,.12),
+        inset 0 -5px 8px rgba(0,0,0,.48);
+      position: relative;
+    }
+
+    .sigil::before {
+      content: "";
+      position: absolute;
+      inset: 22%;
+      border-radius: 50%;
+      border: 2px solid rgba(215,207,173,.36);
+      clip-path: polygon(0 0, 100% 0, 100% 72%, 62% 72%, 62% 100%, 38% 100%, 38% 72%, 0 72%);
+      transform: rotate(var(--turn));
+    }
+
+    .sigil.live {
+      background:
+        radial-gradient(circle at 50% 50%, var(--jade), transparent 42%),
+        linear-gradient(180deg, #303729, #10120d);
+      filter: brightness(1.2);
+    }
+
+    .meter {
+      position: absolute;
+      left: clamp(20px, 2.8vw, 36px);
+      right: clamp(20px, 2.8vw, 36px);
+      bottom: clamp(15px, 2vw, 24px);
+      height: 8px;
+      display: grid;
+      grid-template-columns: repeat(16, 1fr);
+      gap: 6px;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .meter i {
+      display: block;
+      border-radius: 999px;
+      background: rgba(215,207,173,.15);
+      box-shadow: inset 0 1px 1px rgba(255,255,255,.1);
+    }
+
+    .meter i.live {
+      background: var(--brass);
+      box-shadow: 0 0 12px rgba(198,168,75,.62);
+    }
+
+    .fader {
+      display: none;
+    }
+
+    /* Hardware-panel makeover */
+    .machine {
+      width: min(1420px, 100%);
+      aspect-ratio: 2.1;
+      min-height: 560px;
+      padding: clamp(18px, 2vw, 30px) clamp(22px, 2.4vw, 38px) clamp(24px, 2.8vw, 42px);
+      border-radius: 12px;
+      background:
+        radial-gradient(circle at 12% 10%, rgba(255,255,255,.09), transparent 10%),
+        radial-gradient(circle at 88% 12%, rgba(255,255,255,.055), transparent 11%),
+        repeating-linear-gradient(2deg, rgba(255,255,255,.015) 0 1px, transparent 1px 6px),
+        linear-gradient(180deg, #30342f, #191c18 26%, #10120f 100%);
+      box-shadow:
+        0 20px 0 #080907,
+        0 35px 0 #030403,
+        0 70px 95px rgba(0,0,0,.76),
+        inset 0 1px 0 rgba(255,255,255,.22),
+        inset 0 0 0 2px rgba(255,255,255,.04),
+        inset 0 -24px 32px rgba(0,0,0,.7),
+        0 0 0 2px #050604,
+        0 0 0 8px #151713,
+        0 0 0 12px #050604;
+      transform: rotateX(4deg) rotateZ(-.35deg);
+    }
+
+    .machine::before {
+      inset: 14px;
+      border-radius: 8px;
+      border-color: rgba(218,226,212,.11);
+      box-shadow:
+        inset 0 0 0 2px rgba(0,0,0,.48),
+        inset 0 0 0 7px rgba(255,255,255,.025),
+        inset 0 -14px 22px rgba(0,0,0,.42);
+    }
+
+    .machine::after {
+      inset: 0;
+      border-radius: 12px;
+      background:
+        linear-gradient(110deg, transparent 0 52%, rgba(255,255,255,.055) 53%, transparent 58%),
+        radial-gradient(circle at 40% 4%, rgba(255,255,255,.08), transparent 28%),
+        linear-gradient(180deg, rgba(255,255,255,.065), transparent 14%, transparent 78%, rgba(0,0,0,.36));
+      opacity: .48;
+    }
+
+    .rim.left,
+    .rim.right {
+      top: 34px;
+      bottom: -32px;
+      width: 34px;
+      border-radius: 18px;
+      background:
+        linear-gradient(90deg, #050604, #1d211b 34%, #11140f 70%, #020302),
+        linear-gradient(180deg, rgba(255,255,255,.12), transparent);
+    }
+
+    .rim.left { left: -20px; transform: skewY(4deg); }
+    .rim.right { right: -20px; transform: skewY(-4deg); }
+
+    .rim.front {
+      left: 34px;
+      right: 34px;
+      bottom: -34px;
+      height: 48px;
+      border-radius: 0 0 14px 14px;
+      background: linear-gradient(180deg, #171a15, #050604 82%);
+    }
+
+    .ports {
+      top: -21px;
+      left: 16%;
+      right: 10%;
+      justify-content: space-between;
+      gap: 0;
+      z-index: -1;
+    }
+
+    .port {
+      width: 31px;
+      height: 22px;
+      border-radius: 11px 11px 4px 4px;
+      background: linear-gradient(180deg, #232721, #070807);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.12),
+        inset 0 -6px 8px rgba(0,0,0,.62),
+        0 -3px 10px rgba(0,0,0,.52);
+    }
+
+    .port::after {
+      width: 15px;
+      height: 15px;
+      margin-top: 4px;
+      background: radial-gradient(circle at 50% 52%, #010101 0 38%, #2b3029 40% 56%, #070807 58%);
+    }
+
+    .screws {
+      inset: 16px;
+    }
+
+    .screw {
+      width: 20px;
+      height: 20px;
+      background:
+        radial-gradient(circle at 34% 25%, rgba(255,255,255,.9), transparent 14%),
+        radial-gradient(circle at 58% 62%, #222621, #757a70 48%, #1b1e19 58%, #070807 72%);
+      box-shadow:
+        inset 0 2px 1px rgba(255,255,255,.22),
+        inset 0 -4px 5px rgba(0,0,0,.72),
+        0 2px 4px rgba(0,0,0,.62);
+    }
+
+    .surface {
+      display: grid;
+      grid-template-columns: 1fr 1.08fr 1.05fr;
+      grid-template-rows: 1.18fr .88fr .64fr;
+      gap: clamp(14px, 1.45vw, 22px);
+      transform: translateZ(18px);
+    }
+
+    .well,
+    .matrix,
+    .plate,
+    .banks,
+    .glyphs,
+    .fader {
+      border-radius: 8px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.035), transparent 12%, transparent 82%, rgba(0,0,0,.38)),
+        linear-gradient(180deg, #1a1d19, #0a0c0a);
+      border: 1px solid rgba(216,224,216,.075);
+      box-shadow:
+        0 5px 0 #040504,
+        0 12px 18px rgba(0,0,0,.36),
+        inset 0 0 0 1px rgba(0,0,0,.68),
+        inset 0 2px 1px rgba(255,255,255,.07),
+        inset 0 -10px 15px rgba(0,0,0,.54);
+    }
+
+    .well {
+      grid-column: 2;
+      grid-row: 1 / 3;
+      padding: clamp(13px, 1.4vw, 20px);
+      grid-template-rows: 1fr .34fr;
+    }
+
+    .orbital {
+      border-radius: 5px;
+      background:
+        linear-gradient(180deg, rgba(232,255,245,.07), transparent 18%, transparent 76%, rgba(0,0,0,.45)),
+        repeating-linear-gradient(90deg, transparent 0 18px, rgba(178,255,231,.08) 19px 20px),
+        repeating-linear-gradient(0deg, transparent 0 16px, rgba(178,255,231,.07) 17px 18px),
+        radial-gradient(circle at 50% 45%, rgba(72,255,203,.18), transparent 22%),
+        #030605;
+      box-shadow:
+        0 8px 0 #030403,
+        0 16px 18px rgba(0,0,0,.44),
+        inset 0 0 0 8px #080a08,
+        inset 0 0 0 10px rgba(205,235,224,.06),
+        inset 0 0 42px rgba(0,0,0,.8);
+    }
+
+    .halo {
+      border-radius: 0;
+      border: 0;
+      box-shadow: none;
+      background: rgba(190,255,233,.42);
+      height: 2px;
+      inset: 28% 15% auto;
+      transform-origin: center;
+      animation: scanline 5s linear infinite;
+    }
+
+    .halo:nth-child(2) {
+      inset: 52% 12% auto;
+      background: rgba(198,168,75,.5);
+      animation-duration: 7s;
+    }
+
+    .halo:nth-child(3) {
+      inset: 70% 28% auto;
+      background: rgba(255,92,47,.34);
+      animation-duration: 9s;
+    }
+
+    @keyframes scanline {
+      0% { transform: translateX(-18%) scaleX(.45); opacity: .2; }
+      45% { opacity: .82; }
+      100% { transform: translateX(18%) scaleX(1); opacity: .25; }
+    }
+
+    .eye {
+      inset: auto 12% 18% auto;
+      width: 24px;
+      height: 24px;
+      border-radius: 3px;
+      background: var(--jade);
+      box-shadow:
+        0 0 16px rgba(66,231,187,.62),
+        inset 0 2px 2px rgba(255,255,255,.34),
+        inset 0 -5px 7px rgba(0,0,0,.46);
+    }
+
+    .transport {
+      grid-template-columns: repeat(6, minmax(38px, 1fr));
+      gap: 9px;
+      align-items: end;
+    }
+
+    .glyph-button,
+    .bank {
+      min-height: 54px;
+      border-radius: 7px;
+      background:
+        radial-gradient(circle at 34% 18%, rgba(255,255,255,.16), transparent 15%),
+        linear-gradient(180deg, #2b302a, #131613 68%, #050605);
+      box-shadow:
+        0 7px 0 #020302,
+        0 11px 13px rgba(0,0,0,.38),
+        inset 0 0 0 1px rgba(235,245,235,.055),
+        inset 0 2px 1px rgba(255,255,255,.1),
+        inset 0 -8px 10px rgba(0,0,0,.62);
+    }
+
+    .play::before {
+      border-top-width: 12px;
+      border-bottom-width: 12px;
+      border-left-width: 20px;
+    }
+
+    .stop::before {
+      width: 22px;
+      height: 22px;
+    }
+
+    .plate {
+      grid-column: 3;
+      grid-row: 1;
+      grid-template-columns: repeat(3, minmax(72px, 1fr));
+      grid-template-rows: repeat(2, minmax(72px, 1fr));
+      gap: clamp(16px, 1.8vw, 28px);
+      padding: clamp(16px, 1.8vw, 28px);
+      align-items: center;
+      justify-items: center;
+    }
+
+    .dial {
+      width: min(88px, 100%);
+      max-width: 88px;
+      box-shadow:
+        0 8px 0 #050605,
+        0 18px 22px rgba(0,0,0,.5),
+        0 0 0 8px rgba(0,0,0,.26),
+        inset 0 0 0 1px rgba(255,255,255,.08),
+        inset 0 3px 3px rgba(255,255,255,.14),
+        inset 0 -12px 14px rgba(0,0,0,.68);
+      background:
+        radial-gradient(circle at 32% 18%, rgba(255,255,255,.22), transparent 14%),
+        conic-gradient(from -132deg, rgba(215,207,173,.18) 0 74%, transparent 74%),
+        conic-gradient(from -132deg, var(--jade) 0 var(--a), transparent var(--a)),
+        radial-gradient(circle, #444944 0 47%, #171a17 48% 64%, #050605 65%);
+    }
+
+    .banks {
+      grid-column: 1;
+      grid-row: 2;
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      align-items: stretch;
+      padding: clamp(14px, 1.5vw, 20px);
+    }
+
+    .glyphs {
+      grid-column: 1;
+      grid-row: 1;
+      position: relative;
+      left: auto;
+      top: auto;
+      width: auto;
+      opacity: 1;
+      padding: clamp(14px, 1.5vw, 20px);
+      pointer-events: none;
+      grid-template-columns: repeat(5, 1fr);
+      grid-auto-rows: 1fr;
+      align-content: stretch;
+    }
+
+    .sigil {
+      border-radius: 6px;
+      background:
+        radial-gradient(circle at 36% 20%, rgba(255,255,255,.13), transparent 18%),
+        linear-gradient(180deg, #252a25, #111411 74%, #050605);
+      box-shadow:
+        0 6px 0 #020302,
+        0 10px 12px rgba(0,0,0,.35),
+        inset 0 0 0 1px rgba(255,255,255,.045),
+        inset 0 2px 1px rgba(255,255,255,.08),
+        inset 0 -7px 9px rgba(0,0,0,.6);
+    }
+
+    .sigil::before {
+      inset: 31%;
+      border-color: rgba(206,220,210,.5);
+      border-width: 2px;
+    }
+
+    .matrix {
+      grid-column: 1 / 4;
+      grid-row: 3;
+      padding: clamp(12px, 1.35vw, 18px);
+      grid-template-rows: repeat(4, minmax(38px, 1fr));
+      gap: clamp(8px, .8vw, 12px);
+    }
+
+    .row {
+      grid-template-columns: minmax(62px, .45fr) repeat(16, minmax(35px, 1fr));
+      gap: clamp(6px, .58vw, 9px);
+    }
+
+    .voice {
+      min-height: 42px;
+      border-radius: 7px;
+      box-shadow:
+        0 7px 0 #020302,
+        0 12px 14px rgba(0,0,0,.36),
+        inset 0 0 0 1px rgba(255,255,255,.055),
+        inset 0 2px 1px rgba(255,255,255,.12),
+        inset 0 -8px 10px rgba(0,0,0,.62);
+    }
+
+    .step {
+      min-height: 42px;
+      border-radius: 6px;
+      background:
+        radial-gradient(circle at 36% 18%, rgba(255,255,255,.12), transparent 15%),
+        linear-gradient(180deg, #282d27, #121512 72%, #050605);
+      box-shadow:
+        0 7px 0 #020302,
+        0 11px 13px rgba(0,0,0,.34),
+        inset 0 0 0 1px rgba(255,255,255,.045),
+        inset 0 2px 1px rgba(255,255,255,.08),
+        inset 0 -7px 9px rgba(0,0,0,.6);
+    }
+
+    .step::before {
+      inset: 41% 32%;
+      border-radius: 999px;
+      background: rgba(210,222,212,.22);
+    }
+
+    .step.on::before {
+      inset: 29% 25%;
+      border-radius: 4px;
+    }
+
+    .fader {
+      display: block;
+      grid-column: 3;
+      grid-row: 2;
+      align-self: stretch;
+      padding: 22px 44px;
+      position: relative;
+    }
+
+    .fader::before {
+      content: "";
+      position: absolute;
+      left: 11%;
+      right: 11%;
+      top: 50%;
+      height: 12px;
+      border-radius: 999px;
+      transform: translateY(-50%);
+      background: linear-gradient(180deg, #020302, #111411 55%, #050605);
+      box-shadow:
+        inset 0 2px 3px rgba(0,0,0,.85),
+        inset 0 -1px 1px rgba(255,255,255,.08),
+        0 0 0 1px rgba(255,255,255,.055);
+    }
+
+    .fader::after {
+      content: "";
+      position: absolute;
+      left: 14%;
+      right: 14%;
+      top: calc(50% - 42px);
+      height: 84px;
+      background: repeating-linear-gradient(90deg, transparent 0 18px, rgba(204,226,216,.18) 19px 21px, transparent 22px 36px);
+      opacity: .45;
+      pointer-events: none;
+    }
+
+    .fader i {
+      position: absolute;
+      left: calc(var(--x, 50) * 1%);
+      top: 50%;
+      width: 36px;
+      height: 86px;
+      transform: translate(-50%, -50%);
+      border-radius: 9px;
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.18), transparent 18%, transparent 72%, rgba(0,0,0,.46)),
+        linear-gradient(180deg, #d8ded6, #56605a 16%, #1b1f1b 50%, #070807 52%, #d8ded6 100%);
+      box-shadow:
+        0 14px 18px rgba(0,0,0,.55),
+        inset 0 0 0 1px rgba(255,255,255,.22),
+        inset 0 -9px 11px rgba(0,0,0,.55);
+      z-index: 2;
+    }
+
+    .meter {
+      bottom: clamp(8px, 1.2vw, 16px);
+      left: clamp(34px, 3.2vw, 48px);
+      right: clamp(34px, 3.2vw, 48px);
+      height: 6px;
+      opacity: .7;
+    }
+
+    /* Button-cap refinement */
+    .glyph-button,
+    .bank,
+    .sigil,
+    .voice,
+    .step {
+      background:
+        radial-gradient(circle at 30% 14%, rgba(255,255,255,.13), transparent 15%),
+        linear-gradient(180deg, #303430, #171a17 58%, #0a0c0a);
+      border: 1px solid rgba(255,255,255,.035);
+      box-shadow:
+        0 8px 0 #020302,
+        0 15px 18px rgba(0,0,0,.45),
+        inset 0 0 0 1px rgba(255,255,255,.045),
+        inset 0 3px 2px rgba(255,255,255,.08),
+        inset 0 -9px 12px rgba(0,0,0,.68);
+    }
+
+    .glyph-button::after,
+    .bank::after,
+    .sigil::after,
+    .voice::after,
+    .step::after {
+      content: "";
+      position: absolute;
+      left: 12%;
+      right: 12%;
+      top: 11%;
+      height: 46%;
+      border-radius: inherit;
+      background: linear-gradient(180deg, rgba(255,255,255,.075), rgba(255,255,255,.012));
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.03);
+      pointer-events: none;
+    }
+
+    .bank::before,
+    .sigil::before,
+    .voice::before,
+    .step::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: 10%;
+      width: 11px;
+      height: 5px;
+      border: 0;
+      border-radius: 999px;
+      transform: translateX(-50%);
+      background: rgba(205,218,207,.24);
+      box-shadow:
+        0 0 0 1px rgba(0,0,0,.44),
+        inset 0 1px 1px rgba(255,255,255,.16);
+      clip-path: none;
+    }
+
+    .step.on::before,
+    .bank.active::before,
+    .sigil.live::before,
+    .voice.selected::before {
+      inset: auto;
+      left: 50%;
+      bottom: 10%;
+      width: 16px;
+      height: 6px;
+      border-radius: 999px;
+      transform: translateX(-50%);
+      background: var(--c, var(--brass));
+      box-shadow:
+        0 0 14px color-mix(in srgb, var(--c, var(--brass)), transparent 18%),
+        0 0 2px color-mix(in srgb, var(--c, var(--brass)), white 25%),
+        inset 0 1px 1px rgba(255,255,255,.35);
+    }
+
+    .step.on {
+      background:
+        radial-gradient(circle at 50% 76%, color-mix(in srgb, var(--c), transparent 50%), transparent 42%),
+        radial-gradient(circle at 30% 14%, rgba(255,255,255,.16), transparent 15%),
+        linear-gradient(180deg, #353a34, #181c18 58%, #090b09);
+    }
+
+    .step.accent::after {
+      left: 18%;
+      right: 18%;
+      top: 16%;
+      height: 45%;
+      border: 1px solid color-mix(in srgb, var(--c), white 18%);
+      border-radius: 5px;
+      transform: none;
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.01));
+      box-shadow:
+        0 0 10px color-mix(in srgb, var(--c), transparent 35%),
+        inset 0 0 0 1px rgba(0,0,0,.3);
+    }
+
+    .voice {
+      background:
+        radial-gradient(circle at 50% 74%, color-mix(in srgb, var(--c), transparent 68%), transparent 40%),
+        radial-gradient(circle at 30% 14%, rgba(255,255,255,.13), transparent 15%),
+        linear-gradient(180deg, #303430, #171a17 58%, #0a0c0a);
+    }
+
+    .voice::before {
+      width: 18px;
+      height: 6px;
+      bottom: 11%;
+      background: color-mix(in srgb, var(--c), #283028 55%);
+    }
+
+    .voice.selected::before {
+      width: 20px;
+      bottom: 11%;
+      background: color-mix(in srgb, var(--c), white 12%);
+    }
+
+    .voice::after {
+      left: 22%;
+      right: 22%;
+      top: 21%;
+      height: 34%;
+      border-radius: 4px;
+      border: 1px solid color-mix(in srgb, var(--c), white 10%);
+      background: linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.012));
+    }
+
+    .bank {
+      overflow: visible;
+    }
+
+    .bank::before {
+      width: 14px;
+      height: 6px;
+      bottom: 9%;
+      transform: translateX(-50%) rotate(0);
+      border-radius: 999px;
+    }
+
+    .bank.active::before {
+      width: 14px;
+      bottom: 9%;
+    }
+
+    .bank::after {
+      left: 15%;
+      right: 15%;
+      top: 15%;
+      height: 43%;
+      border-radius: 6px;
+    }
+
+    .bank.active {
+      background:
+        radial-gradient(circle at 50% 75%, rgba(198,168,75,.28), transparent 44%),
+        radial-gradient(circle at 30% 14%, rgba(255,255,255,.16), transparent 15%),
+        linear-gradient(180deg, #343831, #181b17 58%, #080a08);
+    }
+
+    .sigil::before {
+      width: 10px;
+      height: 5px;
+      bottom: 11%;
+      transform: translateX(-50%) rotate(0);
+      border-radius: 999px;
+    }
+
+    .sigil.live::before {
+      width: 10px;
+      bottom: 11%;
+    }
+
+    .sigil::after {
+      left: 24%;
+      right: 24%;
+      top: 23%;
+      height: 30%;
+      border-radius: 5px;
+      border: 1px solid rgba(214,222,214,.22);
+      background: transparent;
+    }
+
+    .glyph-button {
+      overflow: hidden;
+    }
+
+    .glyph-button::after {
+      z-index: 0;
+    }
+
+    .glyph-button::before {
+      z-index: 1;
+      opacity: .86;
+    }
+
+    .matte .machine,
+    .machine {
+      background:
+        repeating-linear-gradient(32deg, rgba(255,255,255,.012) 0 1px, transparent 1px 5px),
+        repeating-linear-gradient(116deg, transparent 0 3px, rgba(0,0,0,.05) 4px 5px),
+        linear-gradient(180deg, #252925, #141714 34%, #0d100d);
+    }
+
+    .well,
+    .matrix,
+    .plate,
+    .banks,
+    .glyphs,
+    .fader {
+      background:
+        repeating-linear-gradient(34deg, rgba(255,255,255,.01) 0 1px, transparent 1px 5px),
+        linear-gradient(180deg, #181b18, #0b0d0b);
+    }
+
+    .glyph-button,
+    .bank,
+    .sigil,
+    .voice,
+    .step {
+      background:
+        linear-gradient(180deg, #282c28, #151815 58%, #090b09);
+      box-shadow:
+        0 8px 0 #020302,
+        0 13px 14px rgba(0,0,0,.48),
+        inset 0 0 0 1px rgba(255,255,255,.032),
+        inset 0 2px 1px rgba(255,255,255,.045),
+        inset 0 -8px 10px rgba(0,0,0,.68);
+    }
+
+    .glyph-button::after,
+    .bank::after,
+    .sigil::after,
+    .voice::after,
+    .step::after {
+      background: linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.006));
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.018);
+    }
+
+    .step.on,
+    .bank.active {
+      background:
+        radial-gradient(circle at 50% 78%, color-mix(in srgb, var(--c, var(--brass)), transparent 72%), transparent 38%),
+        linear-gradient(180deg, #2b302b, #151815 58%, #080a08);
+    }
+
+    .eye {
+      box-shadow:
+        0 0 8px rgba(66,231,187,.34),
+        inset 0 1px 1px rgba(255,255,255,.18),
+        inset 0 -4px 6px rgba(0,0,0,.48);
+    }
+
+    .halo {
+      opacity: .42;
+    }
+
+    .control-pad {
+      cursor: pointer;
+      pointer-events: auto;
+    }
+
+    .control-pad::after {
+      border: 0;
+      left: 50%;
+      top: 43%;
+      width: 28%;
+      height: 3px;
+      right: auto;
+      border-radius: 999px;
+      transform: translate(-50%, -50%) rotate(var(--turn, 0deg));
+      background: rgba(210,222,214,.4);
+    }
+
+    .control-pad.track::after {
+      width: 27%;
+      height: 27%;
+      border: 2px solid color-mix(in srgb, var(--c), white 10%);
+      background: color-mix(in srgb, var(--c), transparent 78%);
+      border-radius: 4px;
+      transform: translate(-50%, -50%) rotate(45deg);
+    }
+
+    .control-pad.mute::after {
+      width: 36%;
+      height: 3px;
+      background: rgba(210,222,214,.38);
+      box-shadow: 0 8px 0 rgba(210,222,214,.22);
+      transform: translate(-50%, -50%);
+    }
+
+    .control-pad.tool-a::after {
+      width: 0;
+      height: 0;
+      border-top: 8px solid transparent;
+      border-bottom: 8px solid transparent;
+      border-left: 14px solid rgba(210,222,214,.38);
+      background: transparent;
+      border-radius: 0;
+      transform: translate(-44%, -50%);
+    }
+
+    .control-pad.tool-b::after {
+      width: 27%;
+      height: 27%;
+      border: 2px solid rgba(210,222,214,.36);
+      background: transparent;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .control-pad.tool-c::after {
+      width: 30%;
+      height: 3px;
+      background: rgba(210,222,214,.36);
+      box-shadow:
+        0 -8px 0 rgba(210,222,214,.28),
+        0 8px 0 rgba(210,222,214,.2);
+      transform: translate(-50%, -50%);
+    }
+
+    .control-pad.tool-d::after {
+      width: 28%;
+      height: 28%;
+      border: 2px solid rgba(210,222,214,.34);
+      border-radius: 5px;
+      background: transparent;
+      transform: translate(-50%, -50%) rotate(45deg);
+    }
+
+    .control-pad:active,
+    .control-pad.hot {
+      transform: translateY(5px);
+      box-shadow:
+        0 3px 0 #020302,
+        0 7px 8px rgba(0,0,0,.44),
+        inset 0 0 0 1px rgba(255,255,255,.025),
+        inset 0 2px 1px rgba(255,255,255,.035),
+        inset 0 -5px 8px rgba(0,0,0,.74);
+    }
+
+    .control-pad.muted {
+      opacity: .52;
+      filter: saturate(.55);
+    }
+
+    .control-pad.muted::before {
+      background: rgba(115,122,116,.18);
+      box-shadow: inset 0 1px 1px rgba(255,255,255,.08);
+    }
+
+    /* Compact industrial revision */
+    body {
+      padding: clamp(8px, 1.3vw, 18px);
+    }
+
+    body::before {
+      width: min(780px, 74vw);
+      height: min(96px, 9vw);
+      top: calc(50% + 205px);
+      filter: blur(14px);
+      opacity: .82;
+    }
+
+    .machine {
+      width: min(880px, 96vw);
+      min-height: 0;
+      aspect-ratio: 1.72;
+      padding: clamp(12px, 1.45vw, 18px);
+      border-radius: 9px;
+      background:
+        repeating-linear-gradient(24deg, rgba(255,255,255,.009) 0 1px, transparent 1px 4px),
+        repeating-linear-gradient(116deg, transparent 0 5px, rgba(0,0,0,.045) 6px 7px),
+        linear-gradient(180deg, #202420, #121512 42%, #0b0d0b);
+      box-shadow:
+        0 14px 0 #070807,
+        0 24px 0 #030403,
+        0 42px 62px rgba(0,0,0,.74),
+        inset 0 1px 0 rgba(255,255,255,.08),
+        inset 0 -18px 24px rgba(0,0,0,.72),
+        0 0 0 2px #040504,
+        0 0 0 6px #111410;
+      transform: rotateX(6deg) rotateZ(-.25deg);
+    }
+
+    .machine::before {
+      inset: 9px;
+      border-radius: 6px;
+      border-color: rgba(190,200,190,.03);
+      box-shadow:
+        inset 0 0 0 2px rgba(0,0,0,.66),
+        inset 0 -10px 16px rgba(0,0,0,.48);
+    }
+
+    .machine::after {
+      opacity: .18;
+      background: linear-gradient(180deg, rgba(255,255,255,.028), transparent 18%, transparent 82%, rgba(0,0,0,.32));
+    }
+
+    .rim.left,
+    .rim.right {
+      top: 22px;
+      bottom: -24px;
+      width: 22px;
+      border-radius: 10px;
+      background: linear-gradient(90deg, #020302, #101410 45%, #050605);
+      box-shadow: inset 1px 0 0 rgba(255,255,255,.015), inset -3px 0 7px rgba(0,0,0,.76), 0 12px 18px rgba(0,0,0,.52);
+    }
+
+    .rim.left { left: -12px; }
+    .rim.right { right: -12px; }
+
+    .rim.front {
+      left: 22px;
+      right: 22px;
+      bottom: -24px;
+      height: 32px;
+      border-radius: 0 0 9px 9px;
+      background: linear-gradient(180deg, #0c0f0c, #030403);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.015), inset 0 -9px 12px rgba(0,0,0,.72);
+    }
+
+    .ports {
+      top: -15px;
+      left: 18%;
+      right: 12%;
+    }
+
+    .port {
+      width: 21px;
+      height: 15px;
+      border-radius: 7px 7px 2px 2px;
+      background: linear-gradient(180deg, #171b17, #050605);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.055), inset 0 -4px 5px rgba(0,0,0,.68);
+    }
+
+    .port::after {
+      width: 10px;
+      height: 10px;
+      margin-top: 3px;
+    }
+
+    .screws {
+      inset: 10px;
+    }
+
+    .screw {
+      width: 13px;
+      height: 13px;
+      background:
+        radial-gradient(circle at 38% 30%, rgba(255,255,255,.1), transparent 16%),
+        radial-gradient(circle at 58% 62%, #141814, #3a3f38 48%, #0e110e 58%, #040504 72%);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.04), inset 0 -3px 3px rgba(0,0,0,.76), 0 1px 2px rgba(0,0,0,.56);
+    }
+
+    .screw::after {
+      width: 8px;
+      left: 2.5px;
+      top: 5.5px;
+    }
+
+    .surface {
+      grid-template-columns: .82fr 1.02fr .92fr;
+      grid-template-rows: 1fr .72fr .56fr;
+      gap: clamp(8px, .9vw, 12px);
+      transform: translateZ(13px);
+    }
+
+    .well,
+    .matrix,
+    .plate,
+    .banks,
+    .glyphs,
+    .fader {
+      border-radius: 6px;
+      background:
+        repeating-linear-gradient(30deg, rgba(255,255,255,.007) 0 1px, transparent 1px 4px),
+        linear-gradient(180deg, #151815, #090b09);
+      border-color: rgba(210,220,210,.045);
+      box-shadow:
+        0 3px 0 #030403,
+        0 8px 11px rgba(0,0,0,.4),
+        inset 0 0 0 1px rgba(0,0,0,.72),
+        inset 0 1px 0 rgba(255,255,255,.035),
+        inset 0 -7px 10px rgba(0,0,0,.56);
+    }
+
+    .well {
+      padding: 9px;
+      gap: 8px;
+    }
+
+    .orbital {
+      border-radius: 4px;
+      background:
+        repeating-linear-gradient(90deg, transparent 0 15px, rgba(178,255,231,.035) 16px 17px),
+        repeating-linear-gradient(0deg, transparent 0 14px, rgba(178,255,231,.03) 15px 16px),
+        #020302;
+      box-shadow:
+        0 4px 0 #020302,
+        inset 0 0 0 5px #060806,
+        inset 0 0 26px rgba(0,0,0,.82);
+    }
+
+    .screen-bars {
+      position: absolute;
+      inset: 10px;
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 6px;
+      align-items: center;
+    }
+
+    .screen-bar {
+      height: 100%;
+      min-height: 0;
+      position: relative;
+      border-radius: 2px;
+      background: rgba(178,255,231,.055);
+      overflow: hidden;
+    }
+
+    .screen-bar svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      overflow: hidden;
+    }
+
+    .screen-bar .ghost {
+      fill: none;
+      stroke: rgba(178,255,231,.08);
+      stroke-width: 1;
+    }
+
+    .screen-bar .shape {
+      fill: none;
+      stroke: rgba(178,255,231,.68);
+      stroke-width: 1.35;
+      vector-effect: non-scaling-stroke;
+    }
+
+    .screen-bar .shape.fill {
+      fill: rgba(178,255,231,.2);
+      stroke: rgba(178,255,231,.72);
+    }
+
+    .screen-bar .limit {
+      fill: none;
+      stroke: rgba(215,207,173,.3);
+      stroke-width: 1;
+      vector-effect: non-scaling-stroke;
+    }
+
+    .halo {
+      height: 1px;
+      opacity: .25;
+    }
+
+    .eye {
+      width: 14px;
+      height: 14px;
+      background: color-mix(in srgb, var(--jade), #0a1210 25%);
+      box-shadow: 0 0 3px rgba(66,231,187,.18), inset 0 1px 0 rgba(255,255,255,.08), inset 0 -3px 4px rgba(0,0,0,.56);
+    }
+
+    .transport {
+      grid-template-columns: repeat(6, minmax(26px, 1fr));
+      gap: 5px;
+    }
+
+    .plate {
+      padding: 11px;
+      gap: 12px;
+      grid-template-columns: repeat(3, minmax(45px, 1fr));
+      grid-template-rows: repeat(2, minmax(45px, 1fr));
+    }
+
+    .dial {
+      width: 50px;
+      max-width: 50px;
+      background:
+        radial-gradient(circle at 34% 24%, rgba(255,255,255,.06), transparent 18%),
+        radial-gradient(circle, #2b2f2c 0 50%, #101310 51% 66%, #040504 67%);
+      box-shadow:
+        0 6px 0 #030403,
+        0 12px 13px rgba(0,0,0,.45),
+        0 0 0 4px rgba(0,0,0,.26),
+        inset 0 1px 1px rgba(255,255,255,.06),
+        inset 0 -8px 9px rgba(0,0,0,.72);
+    }
+
+    .dial::before {
+      box-shadow: 1px 3px 3px rgba(0,0,0,.4);
+      background: rgba(215,207,173,.72);
+    }
+
+    .dial::after {
+      inset: 33%;
+      background: linear-gradient(145deg, #10130f, #20251f);
+      box-shadow: inset 0 1px 1px rgba(255,255,255,.04), inset 0 -4px 5px rgba(0,0,0,.72);
+    }
+
+    .banks {
+      padding: 9px;
+      gap: 7px;
+    }
+
+    .glyphs {
+      padding: 9px;
+      gap: 6px;
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .matrix {
+      padding: 9px;
+      gap: 6px;
+      grid-template-rows: repeat(4, minmax(27px, 1fr));
+    }
+
+    .matrix::after {
+      display: none;
+    }
+
+    .row {
+      grid-template-columns: minmax(40px, .45fr) repeat(16, minmax(22px, 1fr));
+      gap: 5px;
+    }
+
+    .glyph-button,
+    .bank,
+    .sigil,
+    .voice,
+    .step {
+      min-height: 28px;
+      border-radius: 4px;
+      background: linear-gradient(180deg, #202420, #111411 62%, #070807);
+      border-color: rgba(255,255,255,.018);
+      box-shadow:
+        0 4px 0 #020302,
+        0 8px 8px rgba(0,0,0,.44),
+        inset 0 0 0 1px rgba(255,255,255,.018),
+        inset 0 1px 0 rgba(255,255,255,.025),
+        inset 0 -5px 7px rgba(0,0,0,.72);
+    }
+
+    .glyph-button::after,
+    .bank::after,
+    .sigil::after,
+    .voice::after,
+    .step::after {
+      top: 12%;
+      height: 34%;
+      background: linear-gradient(180deg, rgba(255,255,255,.018), rgba(255,255,255,.002));
+      box-shadow: none;
+    }
+
+    .play::before {
+      border-top-width: 8px;
+      border-bottom-width: 8px;
+      border-left-width: 13px;
+      filter: none;
+    }
+
+    .stop::before {
+      width: 13px;
+      height: 13px;
+      box-shadow: none;
+    }
+
+    .mist::before,
+    .coil::before,
+    .blade::before {
+      width: 18px;
+      height: 18px;
+      filter: none;
+    }
+
+    .void::before {
+      width: 17px;
+      height: 17px;
+      box-shadow: none;
+    }
+
+    .coil::after {
+      width: 6px;
+      height: 6px;
+      box-shadow: none;
+    }
+
+    .step,
+    .voice {
+      min-height: 27px;
+    }
+
+    .bank::before,
+    .sigil::before,
+    .voice::before,
+    .step::before {
+      width: 8px;
+      height: 3px;
+      bottom: 9%;
+      background: rgba(190,202,190,.15);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+    }
+
+    .step.on::before,
+    .bank.active::before,
+    .sigil.live::before,
+    .voice.selected::before {
+      width: 11px;
+      height: 4px;
+      bottom: 9%;
+      box-shadow:
+        0 0 6px color-mix(in srgb, var(--c, var(--brass)), transparent 38%),
+        inset 0 1px 0 rgba(255,255,255,.16);
+    }
+
+    .step.on,
+    .bank.active {
+      background:
+        linear-gradient(180deg, #222721, #111411 62%, #060706);
+    }
+
+    .step.accent::after,
+    .voice::after,
+    .control-pad.track::after,
+    .control-pad.tool-b::after,
+    .control-pad.tool-d::after {
+      border-color: rgba(205,216,205,.22);
+      box-shadow: none;
+    }
+
+    .voice::after {
+      top: 22%;
+      height: 28%;
+    }
+
+    .fader {
+      padding: 12px 28px;
+    }
+
+    .fader::before {
+      height: 8px;
+      background: #030403;
+    }
+
+    .fader::after {
+      top: calc(50% - 25px);
+      height: 50px;
+      opacity: .25;
+      background: repeating-linear-gradient(90deg, transparent 0 14px, rgba(204,226,216,.14) 15px 16px, transparent 17px 28px);
+    }
+
+    .fader i {
+      width: 23px;
+      height: 55px;
+      border-radius: 5px;
+      background: linear-gradient(180deg, #757d75, #222721 28%, #080908 72%, #858d84);
+      box-shadow:
+        0 9px 12px rgba(0,0,0,.52),
+        inset 0 1px 0 rgba(255,255,255,.12),
+        inset 0 -6px 8px rgba(0,0,0,.68);
+    }
+
+    .meter {
+      left: 24px;
+      right: 24px;
+      bottom: 7px;
+      height: 4px;
+      gap: 4px;
+    }
+
+    .bank::before,
+    .voice::before,
+    .step::before,
+    .bank.active::before,
+    .voice.selected::before,
+    .step.on::before {
+      inset: auto auto 9% 50%;
+      width: 9px;
+      height: 3px;
+      border-radius: 999px;
+      transform: translateX(-50%);
+    }
+
+    .bank.active::before,
+    .voice.selected::before,
+    .step.on::before {
+      width: 11px;
+      height: 4px;
+    }
+
+    /* Minimal core instrument: no decorative/control bloat */
+    .ports,
+    .feet,
+    .glyphs,
+    .fader {
+      display: none;
+    }
+
+    .machine {
+      width: min(720px, 96vw);
+      aspect-ratio: 1.58;
+      padding: 14px;
+    }
+
+    .surface {
+      grid-template-columns: .72fr 1fr;
+      grid-template-rows: .62fr .38fr 1fr;
+      gap: 9px;
+    }
+
+    .well {
+      grid-column: 1;
+      grid-row: 1;
+      padding: 8px;
+      grid-template-rows: 1fr 34px;
+      gap: 7px;
+    }
+
+    .plate {
+      grid-column: 2;
+      grid-row: 1 / 3;
+      padding: 10px;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .banks {
+      grid-column: 1;
+      grid-row: 2;
+      padding: 8px;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: 1fr;
+      gap: 6px;
+    }
+
+    .matrix {
+      grid-column: 1 / 3;
+      grid-row: 3;
+      padding: 8px;
+      gap: 5px;
+    }
+
+    .transport {
+      gap: 5px;
+    }
+
+    .glyph-button,
+    .bank,
+    .voice,
+    .step {
+      box-shadow:
+        0 3px 0 #020302,
+        0 6px 7px rgba(0,0,0,.42),
+        inset 0 0 0 1px rgba(255,255,255,.014),
+        inset 0 -4px 6px rgba(0,0,0,.7);
+    }
+
+    .orbital {
+      min-height: 0;
+    }
+
+    .dial {
+      width: 46px;
+      max-width: 46px;
+      justify-self: center;
+      align-self: center;
+    }
+
+    .step.now,
+    .step.on.now {
+      outline: 0;
+      filter: none;
+      background:
+        radial-gradient(circle at 50% 42%, rgba(235,242,232,.32), transparent 43%),
+        linear-gradient(180deg, #343a34, #171b17 62%, #080908);
+      box-shadow:
+        0 3px 0 #020302,
+        0 6px 9px rgba(0,0,0,.44),
+        0 0 13px rgba(235,242,232,.2),
+        inset 0 0 0 1px rgba(235,242,232,.08),
+        inset 0 -4px 6px rgba(0,0,0,.66);
+    }
+
+    .step.now::before,
+    .step.on.now::before {
+      background: rgba(235,242,232,.9);
+      box-shadow:
+        0 0 10px rgba(235,242,232,.52),
+        inset 0 1px 0 rgba(255,255,255,.42);
+    }
+
+    /* Realistic luminance pass */
+    body {
+      background:
+        radial-gradient(circle at 50% 6%, rgba(210,216,198,.08), transparent 32rem),
+        linear-gradient(145deg, #11130f, #060705 72%);
+    }
+
+    body::before {
+      opacity: .62;
+      filter: blur(18px);
+      background: radial-gradient(ellipse, rgba(0,0,0,.66), rgba(0,0,0,.34) 42%, transparent 74%);
+    }
+
+    .machine {
+      background:
+        repeating-linear-gradient(28deg, rgba(255,255,255,.006) 0 1px, transparent 1px 5px),
+        repeating-linear-gradient(118deg, transparent 0 6px, rgba(0,0,0,.035) 7px 8px),
+        linear-gradient(180deg, #20231f, #141713 44%, #0b0d0b);
+      box-shadow:
+        0 12px 0 #080907,
+        0 21px 0 #030403,
+        0 38px 56px rgba(0,0,0,.68),
+        inset 0 1px 0 rgba(255,255,255,.045),
+        inset 0 -18px 24px rgba(0,0,0,.66),
+        0 0 0 2px #040504,
+        0 0 0 6px #10130f;
+    }
+
+    .machine::after {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .well,
+    .matrix,
+    .plate,
+    .banks {
+      background:
+        repeating-linear-gradient(30deg, rgba(255,255,255,.005) 0 1px, transparent 1px 5px),
+        linear-gradient(180deg, #161916, #0b0d0b);
+      box-shadow:
+        0 3px 0 #030403,
+        0 7px 10px rgba(0,0,0,.36),
+        inset 0 0 0 1px rgba(0,0,0,.72),
+        inset 0 1px 0 rgba(255,255,255,.022),
+        inset 0 -7px 10px rgba(0,0,0,.52);
+    }
+
+    .orbital {
+      background:
+        repeating-linear-gradient(90deg, transparent 0 15px, rgba(150,190,176,.025) 16px 17px),
+        repeating-linear-gradient(0deg, transparent 0 14px, rgba(150,190,176,.02) 15px 16px),
+        #020302;
+      box-shadow:
+        0 4px 0 #020302,
+        inset 0 0 0 5px #050705,
+        inset 0 0 22px rgba(0,0,0,.86);
+    }
+
+    .screen-bar {
+      background: rgba(145,185,168,.035);
+    }
+
+    .screen-bar .shape {
+      stroke: rgba(144,205,184,.52);
+      stroke-width: 1.15;
+    }
+
+    .screen-bar .shape.fill {
+      fill: rgba(144,205,184,.12);
+      stroke: rgba(144,205,184,.54);
+    }
+
+    .screen-bar .limit,
+    .screen-bar .ghost {
+      stroke: rgba(185,194,174,.16);
+    }
+
+    .glyph-button,
+    .bank,
+    .voice,
+    .step {
+      background:
+        linear-gradient(180deg, #1e221e, #111410 64%, #070807);
+      box-shadow:
+        0 3px 0 #020302,
+        0 6px 7px rgba(0,0,0,.4),
+        inset 0 0 0 1px rgba(255,255,255,.012),
+        inset 0 -4px 6px rgba(0,0,0,.68);
+    }
+
+    .glyph-button::after,
+    .bank::after,
+    .voice::after,
+    .step::after {
+      background: linear-gradient(180deg, rgba(255,255,255,.012), rgba(255,255,255,.001));
+    }
+
+    .step.on,
+    .bank.active {
+      background:
+        linear-gradient(180deg, #20251f, #111410 64%, #060706);
+    }
+
+    .bank.active::before,
+    .voice.selected::before,
+    .step.on::before {
+      box-shadow:
+        0 0 4px color-mix(in srgb, var(--c, var(--brass)), transparent 58%),
+        inset 0 1px 0 rgba(255,255,255,.16);
+      filter: saturate(.8) brightness(.9);
+    }
+
+    .play::before,
+    .stop::before,
+    .mist::before,
+    .void::before,
+    .coil::before,
+    .coil::after,
+    .blade::before {
+      filter: saturate(.78) brightness(.86);
+    }
+
+    .dial {
+      background:
+        radial-gradient(circle at 34% 24%, rgba(255,255,255,.04), transparent 18%),
+        radial-gradient(circle, #292e2a 0 50%, #10130f 51% 66%, #040504 67%);
+      box-shadow:
+        0 5px 0 #030403,
+        0 10px 11px rgba(0,0,0,.42),
+        0 0 0 4px rgba(0,0,0,.24),
+        inset 0 1px 0 rgba(255,255,255,.045),
+        inset 0 -7px 8px rgba(0,0,0,.7);
+    }
+
+    .dial::before {
+      background: rgba(202,198,174,.68);
+      box-shadow: 1px 3px 3px rgba(0,0,0,.45);
+    }
+
+    .step.now,
+    .step.on.now {
+      background:
+        radial-gradient(circle at 50% 42%, rgba(218,222,205,.16), transparent 44%),
+        linear-gradient(180deg, #2a2f2a, #141813 64%, #070807);
+      box-shadow:
+        0 3px 0 #020302,
+        0 6px 8px rgba(0,0,0,.42),
+        0 0 7px rgba(218,222,205,.11),
+        inset 0 0 0 1px rgba(218,222,205,.045),
+        inset 0 -4px 6px rgba(0,0,0,.66);
+    }
+
+    .step.now::before,
+    .step.on.now::before {
+      background: rgba(218,222,205,.72);
+      box-shadow:
+        0 0 5px rgba(218,222,205,.28),
+        inset 0 1px 0 rgba(255,255,255,.22);
+    }
+
+    /* Darker matte economy pass */
+    .meter {
+      display: none;
+    }
+
+    body {
+      background:
+        radial-gradient(circle at 50% 5%, rgba(120,124,112,.025), transparent 28rem),
+        linear-gradient(145deg, #060806, #020302 76%);
+    }
+
+    .machine {
+      background:
+        repeating-linear-gradient(28deg, rgba(255,255,255,.003) 0 1px, transparent 1px 5px),
+        repeating-linear-gradient(118deg, transparent 0 6px, rgba(0,0,0,.05) 7px 8px),
+        linear-gradient(180deg, #141714, #0a0d0a 46%, #040504);
+      box-shadow:
+        0 12px 0 #030403,
+        0 21px 0 #010201,
+        0 38px 56px rgba(0,0,0,.76),
+        inset 0 1px 0 rgba(255,255,255,.014),
+        inset 0 -18px 24px rgba(0,0,0,.76),
+        0 0 0 2px #020302,
+        0 0 0 6px #060806;
+    }
+
+    .well,
+    .matrix,
+    .plate,
+    .banks {
+      background:
+        repeating-linear-gradient(30deg, rgba(255,255,255,.002) 0 1px, transparent 1px 5px),
+        linear-gradient(180deg, #0d100d, #040604);
+      border-color: rgba(180,190,180,.018);
+      box-shadow:
+        0 3px 0 #020302,
+        0 7px 10px rgba(0,0,0,.48),
+        inset 0 0 0 1px rgba(0,0,0,.82),
+        inset 0 1px 0 rgba(255,255,255,.006),
+        inset 0 -7px 10px rgba(0,0,0,.66);
+    }
+
+    .glyph-button,
+    .bank,
+    .voice,
+    .step {
+      background: linear-gradient(180deg, #131613, #0a0d0a 64%, #030403);
+      box-shadow:
+        0 3px 0 #010201,
+        0 6px 7px rgba(0,0,0,.52),
+        inset 0 0 0 1px rgba(255,255,255,.005),
+        inset 0 -4px 6px rgba(0,0,0,.78);
+    }
+
+    .glyph-button::after,
+    .bank::after,
+    .voice::after,
+    .step::after {
+      display: none;
+    }
+
+    .step.on,
+    .bank.active {
+      background: linear-gradient(180deg, #151915, #0a0d0a 64%, #030403);
+    }
+
+    .bank::before,
+    .voice::before,
+    .step::before {
+      background: rgba(120,128,120,.13);
+      box-shadow: none;
+    }
+
+    .bank.active::before,
+    .voice.selected::before,
+    .step.on::before {
+      filter: saturate(.56) brightness(.66);
+      box-shadow:
+        0 0 2px color-mix(in srgb, var(--c, var(--brass)), transparent 74%);
+    }
+
+    .step.now,
+    .step.on.now {
+      background:
+        radial-gradient(circle at 50% 44%, rgba(174,178,164,.06), transparent 44%),
+        linear-gradient(180deg, #181c18, #0c0f0c 64%, #030403);
+      box-shadow:
+        0 3px 0 #010201,
+        0 6px 7px rgba(0,0,0,.5),
+        inset 0 0 0 1px rgba(174,178,164,.015),
+        inset 0 -4px 6px rgba(0,0,0,.74);
+    }
+
+    .step.now::before,
+    .step.on.now::before {
+      background: rgba(174,178,164,.48);
+      box-shadow: 0 0 2px rgba(174,178,164,.12);
+    }
+
+    .screen-bar .shape {
+      stroke: rgba(108,158,140,.34);
+    }
+
+    .screen-bar .shape.fill {
+      fill: rgba(108,158,140,.06);
+      stroke: rgba(108,158,140,.36);
+    }
+
+    .play::before,
+    .stop::before,
+    .mist::before,
+    .void::before,
+    .coil::before,
+    .coil::after,
+    .blade::before {
+      filter: saturate(.45) brightness(.52);
+    }
+
+    .dial {
+      background:
+        radial-gradient(circle, #1f231f 0 50%, #0b0e0b 51% 66%, #020302 67%);
+      box-shadow:
+        0 5px 0 #020302,
+        0 10px 11px rgba(0,0,0,.48),
+        0 0 0 4px rgba(0,0,0,.3),
+        inset 0 1px 0 rgba(255,255,255,.026),
+        inset 0 -7px 8px rgba(0,0,0,.74);
+    }
+
+    .dial::before {
+      background: rgba(176,172,150,.58);
+    }
+
+    .voice.selected {
+      filter: none;
+      background: linear-gradient(180deg, #171b17, #0c0f0c 64%, #030403);
+      box-shadow:
+        0 3px 0 #010201,
+        0 6px 7px rgba(0,0,0,.48),
+        inset 0 0 0 1px color-mix(in srgb, var(--c), transparent 84%),
+        inset 0 -4px 6px rgba(0,0,0,.75);
+    }
+
+    .voice.selected::before {
+      background: color-mix(in srgb, var(--c), #5f665d 35%);
+      filter: saturate(.52) brightness(.62);
+      box-shadow: 0 0 2px color-mix(in srgb, var(--c), transparent 76%);
+    }
+
+    .voice.selected::after {
+      border-color: color-mix(in srgb, var(--c), transparent 78%);
+    }
+
+    .bank.active::before {
+      background: var(--bank-color);
+      box-shadow: 0 0 4px color-mix(in srgb, var(--bank-color), transparent 62%);
+    }
+
+    .screen-bar {
+      background: color-mix(in srgb, var(--bank-color, #76a896), transparent 95%);
+    }
+
+    .screen-bar .shape {
+      stroke: color-mix(in srgb, var(--bank-color, #76a896), white 4%);
+    }
+
+    .screen-bar .shape.fill {
+      fill: color-mix(in srgb, var(--bank-color, #76a896), transparent 90%);
+      stroke: color-mix(in srgb, var(--bank-color, #76a896), white 5%);
+    }
+
+    .screen-bar .limit,
+    .screen-bar .ghost {
+      stroke: color-mix(in srgb, var(--bank-color, #76a896), transparent 82%);
+    }
+
+    .screen-bar.voice-tinted {
+      background: linear-gradient(
+        180deg,
+        rgba(145,185,168,.035) 0%,
+        color-mix(in srgb, var(--voice-color), transparent 92%) 100%
+      );
+      box-shadow: inset 0 -6px 10px color-mix(in srgb, var(--voice-color), transparent 88%);
+    }
+
+    .screen-bar.voice-tinted .shape {
+      stroke: color-mix(in srgb, var(--voice-color), rgba(144,205,184,.52) 40%);
+    }
+
+    .screen-bar.voice-tinted .shape.fill {
+      fill: color-mix(in srgb, var(--voice-color), transparent 85%);
+      stroke: color-mix(in srgb, var(--voice-color), rgba(144,205,184,.54) 40%);
+    }
+
+    .screen-bar.voice-tinted .limit,
+    .screen-bar.voice-tinted .ghost {
+      stroke: color-mix(in srgb, var(--voice-color), transparent 86%);
+    }
+
+    .dial::before {
+      transition: transform .12s cubic-bezier(.22, .68, .36, 1.2);
+    }
+
+    .screen-bar.source-preview {
+      grid-column: 3 / 7;
+      background: linear-gradient(
+        180deg,
+        rgba(145,185,168,.02) 0%,
+        color-mix(in srgb, var(--voice-color), transparent 94%) 100%
+      );
+      box-shadow: inset 0 -8px 14px color-mix(in srgb, var(--voice-color), transparent 90%);
+    }
+
+    .screen-bar.source-preview svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .screen-bar.source-preview .shape {
+      stroke-width: 1.5;
+    }
+
+    .source-mode .voice.selected {
+      animation: source-pulse 1s ease-in-out infinite alternate;
+    }
+
+    @keyframes source-pulse {
+      from { filter: saturate(1.1) brightness(1.0); }
+      to { filter: saturate(1.3) brightness(1.15); }
+    }
+
+    .recording .voice.selected {
+      animation: rec-pulse .5s ease-in-out infinite alternate;
+    }
+
+    @keyframes rec-pulse {
+      from { filter: saturate(1.1) brightness(1.0); }
+      to { filter: saturate(1.5) brightness(1.2); box-shadow: 0 0 10px color-mix(in srgb, var(--c), transparent 50%); }
+    }
+
+    .source-slot.synth-slot {
+      position: relative;
+    }
+
+    .source-slot.synth-slot::before {
+      background: rgba(190,202,190,.22);
+    }
+
+    .source-slot.sample-slot.has-sample::before {
+      background: color-mix(in srgb, var(--c), transparent 50%);
+      width: 14px;
+      height: 5px;
+    }
+
+    .source-slot.empty-slot {
+      opacity: .35;
+    }
+
+    .source-slot.empty-slot::before {
+      background: rgba(190,202,190,.08);
+      border: 1px dashed rgba(190,202,190,.18);
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      bottom: auto;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .source-slot.inactive-slot {
+      opacity: .12;
+      pointer-events: none;
+    }
+
+    .source-slot.on::before {
+      background: var(--c);
+      box-shadow: 0 0 8px color-mix(in srgb, var(--c), transparent 30%);
+    }
+
+    .source-slot.drag-over {
+      outline: 2px solid var(--c);
+      outline-offset: -2px;
+      opacity: 1;
+      filter: brightness(1.3);
+    }
+
+    /* Proportion refinement */
+    .machine {
+      width: min(700px, 96vw);
+      aspect-ratio: 1.72;
+      padding: 12px;
+    }
+
+    .surface {
+      grid-template-columns: .68fr 1fr;
+      grid-template-rows: .66fr .2fr .88fr;
+      gap: 8px;
+    }
+
+    .well {
+      padding: 7px;
+      grid-template-rows: 1fr 30px;
+      gap: 6px;
+    }
+
+    .plate {
+      padding: 6px 16px;
+      gap: 4px 28px;
+      align-content: center;
+      justify-content: center;
+    }
+
+    .banks {
+      padding: 5px 8px;
+      gap: 5px;
+      align-content: center;
+    }
+
+    .bank {
+      min-height: 18px;
+      border-radius: 3px;
+      box-shadow:
+        0 2px 0 #010201,
+        0 4px 5px rgba(0,0,0,.45),
+        inset 0 0 0 1px rgba(255,255,255,.007),
+        inset 0 -3px 4px rgba(0,0,0,.72);
+    }
+
+    .bank::after {
+      display: none;
+    }
+
+    .bank::before,
+    .bank.active::before {
+      inset: auto auto 50% 50%;
+      width: 12px;
+      height: 3px;
+      transform: translate(-50%, 50%);
+    }
+
+    .matrix {
+      padding: 7px;
+    }
+
+    .dial {
+      width: 42px;
+      max-width: 42px;
+      background:
+        conic-gradient(from 220deg, rgba(255,255,255,.02), transparent 14%, transparent 74%, rgba(0,0,0,.28)),
+        radial-gradient(circle, #1c201c 0 46%, #0e110e 47% 63%, #020302 64%);
+      box-shadow:
+        0 4px 0 #020302,
+        0 9px 10px rgba(0,0,0,.5),
+        0 0 0 3px rgba(0,0,0,.32),
+        inset 0 1px 0 rgba(255,255,255,.015),
+        inset -4px 0 6px rgba(0,0,0,.22),
+        inset 0 -6px 7px rgba(0,0,0,.76);
+    }
+
+    .dial::before {
+      width: 9%;
+      height: 30%;
+      top: 13%;
+      background: rgba(170,166,142,.52);
+      box-shadow: 1px 2px 2px rgba(0,0,0,.52);
+    }
+
+    .dial::after {
+      inset: 34%;
+      background: radial-gradient(circle, #111411 0%, #0a0c0a 100%);
+      box-shadow: inset 0 0 3px rgba(0,0,0,.8);
+    }
+
+    /* Encoder-under-display layout */
+    .machine {
+      width: min(690px, 96vw);
+      aspect-ratio: 1.82;
+    }
+
+    .surface {
+      grid-template-columns: .7fr 1fr;
+      grid-template-rows: .55fr .28fr .9fr;
+      gap: 8px;
+    }
+
+    .well {
+      grid-column: 1;
+      grid-row: 1;
+      display: block;
+      padding: 7px;
+    }
+
+    .orbital {
+      height: 100%;
+    }
+
+    .plate {
+      grid-column: 1;
+      grid-row: 2;
+      padding: 6px 10px;
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      grid-template-rows: 1fr;
+      gap: 7px;
+      align-items: center;
+      justify-items: center;
+    }
+
+    .dial {
+      width: 28px;
+      max-width: 28px;
+      box-shadow:
+        0 3px 0 #020302,
+        0 6px 7px rgba(0,0,0,.46),
+        0 0 0 2px rgba(0,0,0,.34),
+        inset 0 1px 0 rgba(255,255,255,.01),
+        inset 0 -5px 6px rgba(0,0,0,.78);
+    }
+
+    .dial::before {
+      width: 8%;
+      height: 29%;
+      top: 13%;
+      background: rgba(162,158,136,.48);
+    }
+
+    .dial::after {
+      inset: 35%;
+    }
+
+    .transport,
+    .banks {
+      background:
+        repeating-linear-gradient(30deg, rgba(255,255,255,.002) 0 1px, transparent 1px 5px),
+        linear-gradient(180deg, #0d100d, #040604);
+      border: 1px solid rgba(180,190,180,.018);
+      border-radius: 6px;
+      box-shadow:
+        0 3px 0 #020302,
+        0 7px 10px rgba(0,0,0,.48),
+        inset 0 0 0 1px rgba(0,0,0,.82),
+        inset 0 1px 0 rgba(255,255,255,.006),
+        inset 0 -7px 10px rgba(0,0,0,.66);
+    }
+
+    .transport {
+      grid-column: 2;
+      grid-row: 1;
+      padding: 8px;
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 7px;
+      align-content: center;
+    }
+
+    .banks {
+      grid-column: 2;
+      grid-row: 2;
+      padding: 5px 9px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: 1fr;
+      gap: 8px;
+      align-content: center;
+    }
+
+    .matrix {
+      grid-column: 1 / 3;
+      grid-row: 3;
+      padding: 7px;
+    }
+
+    .machine {
+      --tilt-x: 0deg;
+      --tilt-y: 0deg;
+      transform: rotateX(calc(8deg + var(--tilt-y))) rotateY(var(--tilt-x)) rotateZ(-1.2deg);
+      transition: transform .18s ease-out;
+    }
+
+    .glyph-button:active,
+    .bank:active,
+    .voice:active,
+    .step:active {
+      transform: translateY(2px);
+      box-shadow:
+        0 1px 0 #010201,
+        0 3px 4px rgba(0,0,0,.52),
+        inset 0 0 0 1px rgba(255,255,255,.004),
+        inset 0 -3px 5px rgba(0,0,0,.82);
+    }
+
+    .step.locked {
+      box-shadow:
+        0 3px 0 #010201,
+        0 6px 7px rgba(0,0,0,.52),
+        inset 0 0 0 1px color-mix(in srgb, var(--c), transparent 58%),
+        inset 0 -4px 6px rgba(0,0,0,.78);
+    }
+
+    .step.locked::before {
+      clip-path: polygon(50% 13%, 58% 42%, 88% 42%, 63% 59%, 73% 88%, 50% 70%, 27% 88%, 37% 59%, 12% 42%, 42% 42%);
+    }
+
+    .step.chance:not(.now)::before {
+      opacity: calc(.18 + var(--chance) * .58);
+    }
+
+    @media (max-width: 760px) {
+      body {
+        padding: 10px;
+        place-items: start center;
+      }
+
+      .machine {
+        min-height: 880px;
+        aspect-ratio: auto;
+        transform: rotateX(3deg);
+      }
+
+      .surface {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto auto;
+      }
+
+      .matrix {
+        grid-column: 1;
+        grid-row: auto;
+      }
+
+      .row {
+        grid-template-columns: minmax(46px, .55fr) repeat(8, 1fr);
+        grid-auto-flow: row;
+      }
+
+      .step,
+      .voice {
+        min-height: 42px;
+      }
+
+      .plate {
+        grid-template-columns: repeat(3, minmax(74px, 1fr));
+      }
+
+      .transport {
+        grid-template-columns: repeat(6, 1fr);
+      }
+
+      .glyphs {
+        display: none;
+      }
+
+      .banks {
+        grid-column: 1;
+        grid-row: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="machine" id="machine">
+    <i class="rim left"></i>
+    <i class="rim right"></i>
+    <i class="rim front"></i>
+    <div class="screws" aria-hidden="true">
+      <i class="screw"></i><i class="screw"></i><i class="screw"></i><i class="screw"></i>
+    </div>
+
+    <section class="surface">
+      <div class="well">
+        <div class="orbital" aria-hidden="true">
+          <div class="screen-bars" id="screenBars"></div>
+        </div>
+      </div>
+
+      <div class="transport">
+        <button class="glyph-button play" data-act="play" aria-label="start"></button>
+        <button class="glyph-button stop" data-act="stop" aria-label="stop"></button>
+        <button class="glyph-button mist" data-act="random" aria-label="shuffle"></button>
+        <button class="glyph-button void" data-act="clear" aria-label="clear"></button>
+        <button class="glyph-button coil" data-act="fill" aria-label="fill"></button>
+        <button class="glyph-button blade" data-act="shift" aria-label="shift"></button>
+      </div>
+
+      <div class="plate">
+        <div class="dial" data-dial="tempo" style="--a: 43%; --r: -24deg" role="slider" aria-label="tempo"></div>
+        <div class="dial" data-dial="swing" style="--a: 20%; --r: -84deg" role="slider" aria-label="swing"></div>
+        <div class="dial" data-dial="tune" style="--a: 55%; --r: 12deg" role="slider" aria-label="tune"></div>
+        <div class="dial" data-dial="decay" style="--a: 42%; --r: -20deg" role="slider" aria-label="decay"></div>
+        <div class="dial" data-dial="grit" style="--a: 18%; --r: -90deg" role="slider" aria-label="grit"></div>
+        <div class="dial" data-dial="echo" style="--a: 8%; --r: -112deg" role="slider" aria-label="echo"></div>
+      </div>
+
+      <div class="banks" id="banks" aria-label="memory"></div>
+
+      <div class="matrix" id="matrix" aria-label="sequencer"></div>
+
+    </section>
+
+  </main>
+
+  <script>
+    const voices = [
+      { color: "#e85d3a", shape: "polygon(50% 0,92% 24%,92% 76%,50% 100%,8% 76%,8% 24%)", pattern: [0,4,8,12] },
+      { color: "#d4c898", shape: "polygon(0 44%,44% 44%,44% 0,56% 0,56% 44%,100% 44%,100% 56%,56% 56%,56% 100%,44% 100%,44% 56%,0 56%)", pattern: [4,12] },
+      { color: "#38d4be", shape: "polygon(50% 0,62% 35%,100% 50%,62% 65%,50% 100%,38% 65%,0 50%,38% 35%)", pattern: [2,6,10,14] },
+      { color: "#5c7cf0", shape: "polygon(50% 3%,64% 36%,98% 36%,71% 57%,82% 92%,50% 72%,18% 92%,29% 57%,2% 36%,36% 36%)", pattern: [7,15] }
+    ];
+    const bankColors = ["#d4a030", "#d84888", "#78c838", "#a878e8"];
+    const SYNTH_COUNT = 10;
+    const ROM_SAMPLE_COUNT = 28;
+    const USER_SAMPLE_COUNT = 8;
+    const SAMPLE_COUNT = ROM_SAMPLE_COUNT + USER_SAMPLE_COUNT;
+
+    function clamp01(v) { return Math.min(1, Math.max(0, v)); }
+
+    const state = {
+      steps: voices.map(v => Array.from({ length: 16 }, (_, i) => v.pattern.includes(i))),
+      accents: voices.map(() => Array(16).fill(false)),
+      probabilities: voices.map(() => Array(16).fill(1)),
+      locks: emptyLockGrid(),
+      selected: 0,
+      activeBank: 0,
+      fill: false,
+      current: -1,
+      nextStep: 0,
+      nextStepTime: 0,
+      playing: false,
+      tempo: 116,
+      swing: .1,
+      voiceParams: [
+        { engine: 0, tune: .45, decay: .62, grit: .12, echo: .04, sampleStart: 0, sampleEnd: 1, samplePitch: .5 },
+        { engine: 1, tune: .55, decay: .48, grit: .22, echo: .10, sampleStart: 0, sampleEnd: 1, samplePitch: .5 },
+        { engine: 2, tune: .60, decay: .30, grit: .08, echo: .18, sampleStart: 0, sampleEnd: 1, samplePitch: .5 },
+        { engine: 3, tune: .50, decay: .55, grit: .15, echo: .12, sampleStart: 0, sampleEnd: 1, samplePitch: .5 }
+      ],
+      sourceMode: null,
+      lockTarget: null,
+      recording: false,
+      sampleBuffers: Array(SAMPLE_COUNT).fill(null),
+      nextSampleSlot: 0,
+      timer: null,
+      visualTimers: [],
+      ctx: null,
+      master: null,
+      limiter: null,
+      voiceShapers: [],
+      echoSends: [],
+      delay: null,
+      feedback: null,
+      wet: null,
+      mediaStream: null,
+      recorder: null,
+      recordChunks: [],
+      banks: []
+    };
+
+    const machine = document.getElementById("machine");
+    const matrix = document.getElementById("matrix");
+    const banks = document.getElementById("banks");
+    const screenBars = document.getElementById("screenBars");
+
+    function cloneGrid(grid) {
+      return grid.map(row => row.slice());
+    }
+
+    function emptyLockGrid() {
+      return voices.map(() => Array.from({ length: 16 }, () => ({})));
+    }
+
+    function cloneLockGrid(grid) {
+      return voices.map((_, row) =>
+        Array.from({ length: 16 }, (_, col) => ({ ...(grid?.[row]?.[col] || {}) }))
+      );
+    }
+
+    const defaultVoiceParams = [
+      { engine: 0, tune: .45, decay: .62, grit: .12, echo: .04, sampleStart: 0, sampleEnd: 1, samplePitch: .5 },
+      { engine: 1, tune: .55, decay: .48, grit: .22, echo: .10, sampleStart: 0, sampleEnd: 1, samplePitch: .5 },
+      { engine: 2, tune: .60, decay: .30, grit: .08, echo: .18, sampleStart: 0, sampleEnd: 1, samplePitch: .5 },
+      { engine: 3, tune: .50, decay: .55, grit: .15, echo: .12, sampleStart: 0, sampleEnd: 1, samplePitch: .5 }
+    ];
+
+    function makeBank(seed) {
+      const steps = voices.map((voice, row) =>
+        Array.from({ length: 16 }, (_, col) => {
+          const base = voice.pattern.includes((col + seed * (row + 1)) % 16);
+          const off = (col * (row + 3) + seed * 5) % (row + 4) === 0;
+          return base || off && col % 2 === row % 2;
+        })
+      );
+      const accents = voices.map((_, row) =>
+        Array.from({ length: 16 }, (_, col) => steps[row][col] && (col + row + seed) % 5 === 0)
+      );
+      const probabilities = voices.map(() => Array(16).fill(1));
+      const locks = emptyLockGrid();
+      const voiceParams = defaultVoiceParams.map((bp, i) => ({
+        engine: bp.engine,
+        tune:  clamp01(bp.tune  + seed * .08 * (i % 2 ? 1 : -1)),
+        decay: clamp01(bp.decay + seed * .05 * (i % 3 ? -1 : 1)),
+        grit:  clamp01(bp.grit  + seed * .04),
+        echo:  clamp01(bp.echo  + seed * .03 * (i % 2 ? 1 : -1)),
+        sampleStart: 0, sampleEnd: 1, samplePitch: .5
+      }));
+      return { steps, accents, probabilities, locks, voiceParams };
+    }
+
+    state.banks = [0, 1, 2, 3].map(makeBank);
+    state.banks[0] = {
+      steps: cloneGrid(state.steps),
+      accents: cloneGrid(state.accents),
+      probabilities: cloneGrid(state.probabilities),
+      locks: cloneLockGrid(state.locks),
+      voiceParams: state.voiceParams.map(vp => ({ ...vp }))
+    };
+
+    function initAudio() {
+      if (state.ctx) return;
+      state.ctx = new (window.AudioContext || window.webkitAudioContext)();
+      state.master = state.ctx.createGain();
+      state.limiter = state.ctx.createDynamicsCompressor();
+      state.master.gain.value = .78;
+      state.limiter.threshold.value = -12;
+      state.limiter.knee.value = 18;
+      state.limiter.ratio.value = 7;
+      state.limiter.attack.value = .003;
+      state.limiter.release.value = .16;
+      state.delay = state.ctx.createDelay(.8);
+      state.feedback = state.ctx.createGain();
+      state.wet = state.ctx.createGain();
+      state.delay.delayTime.value = .19;
+      state.feedback.gain.value = .32;
+      state.master.connect(state.limiter);
+      state.limiter.connect(state.ctx.destination);
+      state.delay.connect(state.feedback);
+      state.feedback.connect(state.delay);
+      state.delay.connect(state.wet);
+      state.wet.connect(state.ctx.destination);
+
+      state.voiceShapers = [];
+      state.echoSends = [];
+      for (let i = 0; i < 4; i++) {
+        const shaper = state.ctx.createWaveShaper();
+        shaper.oversample = "2x";
+        shaper.curve = curve(state.voiceParams[i].grit);
+        shaper.connect(state.master);
+        const echoSend = state.ctx.createGain();
+        echoSend.gain.value = state.voiceParams[i].echo * .42;
+        shaper.connect(echoSend);
+        echoSend.connect(state.delay);
+        state.voiceShapers.push(shaper);
+        state.echoSends.push(echoSend);
+      }
+      seedRomSamples();
+    }
+
+    function curve(amount) {
+      const n = 512;
+      const data = new Float32Array(n);
+      const k = amount * 42;
+      for (let i = 0; i < n; i++) {
+        const x = i * 2 / n - 1;
+        data[i] = (1 + k) * x / (1 + k * Math.abs(x));
+      }
+      return data;
+    }
+
+    function updateFx() {
+      if (!state.ctx) return;
+      for (let i = 0; i < 4; i++) updateVoiceFx(i);
+    }
+
+    function updateVoiceFx(i) {
+      if (!state.ctx) return;
+      const vp = state.voiceParams[i];
+      if (state.voiceShapers[i]) state.voiceShapers[i].curve = curve(vp.grit);
+      if (state.echoSends[i]) {
+        state.echoSends[i].gain.setTargetAtTime(vp.echo * .42, state.ctx.currentTime, .02);
+      }
+    }
+
+    function seeded(seed) {
+      let x = seed >>> 0;
+      return () => {
+        x ^= x << 13; x ^= x >>> 17; x ^= x << 5;
+        return ((x >>> 0) / 4294967295) * 2 - 1;
+      };
+    }
+
+    function seedRomSamples() {
+      if (!state.ctx || state.sampleBuffers[0]) return;
+      const makers = [
+        () => renderHit(.62, (i, p) => sineDrop(i, p, 150, 38, 8) + clickSample(i, p, .012, .55), 11),
+        () => renderHit(.48, (i, p) => sineDrop(i, p, 92, 33, 6) + clickSample(i, p, .018, .36), 13),
+        () => renderHit(.34, (i, p) => sineDrop(i, p, 210, 54, 12) * .72 + clickSample(i, p, .009, .42), 17),
+        () => renderHit(.34, (i, p) => snareSample(i, p, 21, 178, .95, .74), 21),
+        () => renderHit(.30, (i, p) => snareSample(i, p, 23, 224, .72, .55), 23),
+        () => renderHit(.18, (i, p) => noiseBurst(i, p, 29, 9, 6200), 29),
+        () => renderHit(.08, (i, p) => noiseBurst(i, p, 31, 15, 8800), 31),
+        () => renderHit(.30, (i, p) => clapSample(i, p, 37), 37),
+        () => renderHit(.09, (i, p) => squareTone(i, p, 1200, 18) * .75 + clickSample(i, p, .006, .45), 41),
+        () => renderHit(.38, (i, p) => sineDrop(i, p, 132, 52, 5) + clickSample(i, p, .014, .25), 43),
+        () => renderHit(.24, (i, p) => sineDrop(i, p, 420, 130, 14) * .6 + noiseBurst(i, p, 47, 8, 2400) * .28, 47),
+        () => renderHit(.16, (i, p) => Math.sin(i * .064 + Math.sin(i * .017) * 8) * Math.exp(-p * 7), 53),
+        () => renderHit(.13, (i, p) => squareTone(i, p, 540, 7) + squareTone(i, p, 812, 7), 59),
+        () => renderHit(.22, (i, p) => Math.sin(i * (.02 + p * .16)) * Math.exp(-p * 3.5), 61),
+        () => renderHit(.26, (i, p) => noiseBurst(i, p, 67, 6.8, 3400) * .5 + Math.sin(i * .22) * Math.exp(-p * 11) * .32, 67),
+        () => renderHit(.42, (i, p) => sineDrop(i, p, 74, 29, 4.4) + noiseBurst(i, p, 71, 7, 420) * .16, 71),
+        () => renderHit(.70, (i, p) => sineDrop(i, p, 188, 46, 10) * 1.1 + sineDrop(i, p, 74, 37, 2.2) * .35 + clickSample(i, p, .006, .7), 73),
+        () => renderHit(.52, (i, p) => Math.tanh(sineDrop(i, p, 108, 42, 5.8) * 2.7) * Math.exp(-p * 2.1) + clickSample(i, p, .014, .25), 79),
+        () => renderHit(.36, (i, p) => sineDrop(i, p, 82, 49, 2.8) * .78 + noiseBurst(i, p, 83, 10, 680) * .25, 83),
+        () => renderHit(.28, (i, p) => snareSample(i, p, 89, 164, 1.15, .48), 89),
+        () => renderHit(.22, (i, p) => snareSample(i, p, 97, 246, .9, .38), 97),
+        () => renderHit(.42, (i, p) => snareSample(i, p, 101, 138, .62, .9), 101),
+        () => renderHit(.045, (i, p) => metallicCluster(i, p, [6220, 7030, 8120, 9310], 30) + noiseBurst(i, p, 103, 32, 9500) * .45, 103),
+        () => renderHit(.24, (i, p) => metallicCluster(i, p, [5200, 5880, 6700, 8120, 9100], 8.5) + noiseBurst(i, p, 107, 9, 8200) * .34, 107),
+        () => renderHit(.62, (i, p) => metallicCluster(i, p, [3100, 3860, 4650, 6210], 3.8) * .72 + noiseBurst(i, p, 109, 3.2, 6800) * .28, 109),
+        () => renderHit(.22, (i, p) => clapSample(i, p, 113) * .85 + noiseBurst(i, p, 127, 9.5, 2600) * .35, 113),
+        () => renderHit(.16, (i, p) => metallicCluster(i, p, [980, 1470, 2210], 12) + clickSample(i, p, .01, .25), 127),
+        () => renderHit(.30, (i, p) => Math.sin(i * (.01 + p * p * .62)) * Math.exp(-p * 4.4) + noiseBurst(i, p, 131, 8, 5000) * .18, 131)
+      ];
+      makers.forEach((make, i) => state.sampleBuffers[i] = make());
+    }
+
+    function renderHit(seconds, sampleFn, seed) {
+      const len = Math.max(1, Math.floor(state.ctx.sampleRate * seconds));
+      const buf = state.ctx.createBuffer(1, len, state.ctx.sampleRate);
+      const data = buf.getChannelData(0);
+      for (let i = 0; i < len; i++) data[i] = sampleFn(i, i / len, seed);
+      normalizeBuffer(buf);
+      return buf;
+    }
+
+    function normalizeBuffer(buf) {
+      const data = buf.getChannelData(0);
+      let peak = 0;
+      for (let i = 0; i < data.length; i++) peak = Math.max(peak, Math.abs(data[i]));
+      if (peak > .01) {
+        const scale = .86 / peak;
+        for (let i = 0; i < data.length; i++) data[i] *= scale;
+      }
+    }
+
+    function sineDrop(i, p, start, end, curveAmt) {
+      const f = end + (start - end) * Math.exp(-p * curveAmt);
+      return Math.sin(i * f / state.ctx.sampleRate * Math.PI * 2) * Math.exp(-p * 7);
+    }
+
+    function sineTone(i, p, freq, decay) {
+      return Math.sin(i * freq / state.ctx.sampleRate * Math.PI * 2) * Math.exp(-p * decay);
+    }
+
+    function clickSample(i, p, seconds, peak) {
+      const env = Math.max(0, 1 - p / Math.max(.001, seconds));
+      return Math.sin(i * .72) * env * peak;
+    }
+
+    function noiseBurst(i, p, seed, decay, filterish) {
+      const rnd = seeded(seed + i)();
+      const tone = Math.sin(i * filterish / state.ctx.sampleRate * Math.PI * 2) * .35;
+      return (rnd * .65 + tone) * Math.exp(-p * decay);
+    }
+
+    function snareSample(i, p, seed, bodyFreq, snap, tail) {
+      const rnd = seeded(seed + i * 3)();
+      const rattle = seeded(seed * 17 + i * 11)();
+      const bodyEnv = Math.exp(-p * 10);
+      const wireEnv = Math.exp(-p * (5.2 - tail * 1.6));
+      const body =
+        Math.sin(i * bodyFreq / state.ctx.sampleRate * Math.PI * 2) * bodyEnv * .58 +
+        Math.sin(i * bodyFreq * 1.62 / state.ctx.sampleRate * Math.PI * 2 + .4) * bodyEnv * .2;
+      const grit = (rnd * .72 + rattle * .28) * wireEnv;
+      const fizz = Math.sin(i * (3400 + snap * 1800) / state.ctx.sampleRate * Math.PI * 2) * rnd * wireEnv * .18;
+      const transient = clickSample(i, p, .007 + snap * .004, .58 + snap * .32);
+      const earlyWire = Math.exp(-Math.pow((p - .018) * 88, 2)) * rattle * .35;
+      return body + grit * (.48 + snap * .3) + fizz + transient + earlyWire;
+    }
+
+    function clapSample(i, p, seed) {
+      const burst = n => Math.exp(-Math.pow((p - n) * 70, 2));
+      return noiseBurst(i, p, seed, 5.2, 1800) * (burst(.035) + burst(.075) + burst(.12) + Math.exp(-Math.max(0, p - .15) * 8) * .55);
+    }
+
+    function squareTone(i, p, freq, decay) {
+      return (Math.sin(i * freq / state.ctx.sampleRate * Math.PI * 2) > 0 ? 1 : -1) * Math.exp(-p * decay) * .45;
+    }
+
+    function metallicCluster(i, p, freqs, decay) {
+      const sum = freqs.reduce((acc, freq, n) => {
+        const phase = n * .47;
+        return acc + Math.sin(i * freq / state.ctx.sampleRate * Math.PI * 2 + phase) / freqs.length;
+      }, 0);
+      return sum * Math.exp(-p * decay);
+    }
+
+    function envGain(t, peak, decay) {
+      const g = state.ctx.createGain();
+      g.gain.setValueAtTime(.0001, t);
+      g.gain.exponentialRampToValueAtTime(peak, t + .008);
+      g.gain.exponentialRampToValueAtTime(.0001, t + decay);
+      return g;
+    }
+
+    // --- Engine definitions ---
+    // Each engine: { play(ctx, t, vp, force, out) }
+    // vp = voiceParams, force = accent multiplier, out = destination gain node
+
+    const synthEngines = [
+      // 0: Kick — sine pitch drop + click
+      { play(ctx, t, vp, force, out) {
+        const tone = .65 + vp.tune * 1.6;
+        const osc = ctx.createOscillator();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime((148 + vp.grit * 28) * tone, t);
+        osc.frequency.exponentialRampToValueAtTime(38 + vp.tune * 14, t + .14);
+        osc.connect(out); osc.start(t); osc.stop(t + .5);
+        click(t, .03, .22 * force, out);
+      }},
+      // 1: Snare — membrane body + snare-wire noise + crack
+      { play(ctx, t, vp, force, out) {
+        synthSnare(t, vp, force, out);
+      }},
+      // 2: Hat — highpass noise
+      { play(ctx, t, vp, force, out) {
+        noise(t, .05 + vp.decay * .08, out, 5200 + vp.tune * 6500, "highpass");
+      }},
+      // 3: Perc — triangle pitch drop
+      { play(ctx, t, vp, force, out) {
+        const tone = .65 + vp.tune * 1.6;
+        const osc = ctx.createOscillator();
+        osc.type = "triangle";
+        osc.frequency.setValueAtTime(260 * tone, t);
+        osc.frequency.exponentialRampToValueAtTime(112 * tone, t + .18);
+        osc.connect(out); osc.start(t); osc.stop(t + .36);
+      }},
+      // 4: Rim — short high square click
+      { play(ctx, t, vp, force, out) {
+        const osc = ctx.createOscillator();
+        osc.type = "square";
+        osc.frequency.setValueAtTime(800 + vp.tune * 1200, t);
+        osc.connect(out); osc.start(t); osc.stop(t + .015 + vp.decay * .02);
+        const osc2 = ctx.createOscillator();
+        osc2.type = "sine";
+        osc2.frequency.setValueAtTime(1600 + vp.tune * 800, t);
+        osc2.connect(out); osc2.start(t); osc2.stop(t + .008);
+      }},
+      // 5: Tom — sine drop, longer and deeper
+      { play(ctx, t, vp, force, out) {
+        const tone = .65 + vp.tune * 1.2;
+        const osc = ctx.createOscillator();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime((95 + vp.tune * 80) * tone, t);
+        osc.frequency.exponentialRampToValueAtTime(32 + vp.tune * 18, t + .22);
+        osc.connect(out); osc.start(t); osc.stop(t + .6);
+        click(t, .02, .12 * force, out);
+      }},
+      // 6: Clap — layered noise bursts with pre-delay
+      { play(ctx, t, vp, force, out) {
+        const gap = .012 + vp.tune * .008;
+        for (let i = 0; i < 3; i++) {
+          noise(t + i * gap, .01, out, 1200 + vp.tune * 2400, "bandpass");
+        }
+        noise(t + gap * 3, .06 + vp.decay * .08, out, 1800 + vp.tune * 1600, "bandpass");
+      }},
+      // 7: Zap — fast sine sweep upward
+      { play(ctx, t, vp, force, out) {
+        const osc = ctx.createOscillator();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(80 + vp.tune * 60, t);
+        osc.frequency.exponentialRampToValueAtTime(1200 + vp.tune * 3000, t + .04 + vp.decay * .06);
+        osc.connect(out); osc.start(t); osc.stop(t + .08 + vp.decay * .1);
+      }},
+      // 8: Cow — two detuned squares, bandpass
+      { play(ctx, t, vp, force, out) {
+        const f = 540 + vp.tune * 220;
+        const filter = ctx.createBiquadFilter();
+        filter.type = "bandpass"; filter.frequency.value = f * 2; filter.Q.value = 8;
+        filter.connect(out);
+        const o1 = ctx.createOscillator(); o1.type = "square"; o1.frequency.value = f;
+        const o2 = ctx.createOscillator(); o2.type = "square"; o2.frequency.value = f * 1.504;
+        o1.connect(filter); o2.connect(filter);
+        o1.start(t); o2.start(t);
+        o1.stop(t + .06 + vp.decay * .12); o2.stop(t + .06 + vp.decay * .12);
+      }},
+      // 9: FM — metallic FM hit
+      { play(ctx, t, vp, force, out) {
+        const carrier = ctx.createOscillator();
+        const mod = ctx.createOscillator();
+        const modGain = ctx.createGain();
+        const cFreq = 180 + vp.tune * 400;
+        carrier.frequency.value = cFreq;
+        mod.frequency.value = cFreq * (1.5 + vp.grit * 6);
+        modGain.gain.setValueAtTime(cFreq * (2 + vp.tune * 8), t);
+        modGain.gain.exponentialRampToValueAtTime(1, t + .05 + vp.decay * .15);
+        mod.connect(modGain); modGain.connect(carrier.frequency);
+        carrier.connect(out);
+        mod.start(t); carrier.start(t);
+        mod.stop(t + .2 + vp.decay * .2); carrier.stop(t + .2 + vp.decay * .2);
+      }}
+    ];
+
+    function playSampleEngine(ctx, t, vp, force, out) {
+      const slotIndex = vp.engine - SYNTH_COUNT;
+      const buf = state.sampleBuffers[slotIndex];
+      if (!buf) return;
+      const src = ctx.createBufferSource();
+      src.buffer = buf;
+      const rate = Math.pow(2, (vp.samplePitch - .5) * 4);
+      src.playbackRate.value = rate;
+      const startSec = vp.sampleStart * buf.duration;
+      const endSec = vp.sampleEnd * buf.duration;
+      const dur = Math.max(.001, endSec - startSec);
+      src.connect(out);
+      src.start(t, startSec, dur);
+    }
+
+    function playVoice(index, when = 0, accent = false, lockedParams = null) {
+      initAudio();
+      const t = when || state.ctx.currentTime;
+      const vp = lockedParams || state.voiceParams[index];
+      const force = accent ? 1.32 : 1;
+      const baseDecay = [.42, .24, .08, .34, .03, .52, .14, .1, .08, .18];
+      const di = Math.min(vp.engine, baseDecay.length - 1);
+      const decay = baseDecay[di] * (.7 + vp.decay * .9);
+      const out = envGain(t, .74 * force, decay);
+      if (lockedParams && state.ctx) {
+        const shaper = state.ctx.createWaveShaper();
+        shaper.oversample = "2x";
+        shaper.curve = curve(vp.grit);
+        const echoSend = state.ctx.createGain();
+        echoSend.gain.value = vp.echo * .42;
+        shaper.connect(state.master);
+        shaper.connect(echoSend);
+        echoSend.connect(state.delay);
+        out.connect(shaper);
+      } else {
+        out.connect(state.voiceShapers[index] || state.master);
+      }
+
+      if (vp.engine < SYNTH_COUNT) {
+        synthEngines[vp.engine].play(state.ctx, t, vp, force, out);
+      } else {
+        playSampleEngine(state.ctx, t, vp, force, out);
+      }
+
+      pulsePad(index);
+    }
+
+    function noise(t, dur, dest, freq, type) {
+      const len = Math.max(1, Math.floor(state.ctx.sampleRate * dur));
+      const buf = state.ctx.createBuffer(1, len, state.ctx.sampleRate);
+      const data = buf.getChannelData(0);
+      for (let i = 0; i < len; i++) data[i] = Math.random() * 2 - 1;
+      const src = state.ctx.createBufferSource();
+      const filter = state.ctx.createBiquadFilter();
+      filter.type = type;
+      filter.frequency.value = freq;
+      filter.Q.value = type === "bandpass" ? 1.8 : .45;
+      src.buffer = buf;
+      src.connect(filter);
+      filter.connect(dest);
+      src.start(t);
+      src.stop(t + dur);
+    }
+
+    function click(t, dur, peak, dest) {
+      const osc = state.ctx.createOscillator();
+      const g = envGain(t, peak, dur);
+      osc.type = "square";
+      osc.frequency.value = 1100;
+      osc.connect(g);
+      g.connect(dest);
+      osc.start(t);
+      osc.stop(t + dur);
+    }
+
+    function synthSnare(t, vp, force, out) {
+      const bodyFreq = 145 + vp.tune * 115;
+      const body = state.ctx.createOscillator();
+      const overtone = state.ctx.createOscillator();
+      const bodyGain = state.ctx.createGain();
+      const tailDur = .12 + vp.decay * .2;
+      body.type = "triangle";
+      overtone.type = "sine";
+      body.frequency.setValueAtTime(bodyFreq * 1.18, t);
+      body.frequency.exponentialRampToValueAtTime(bodyFreq, t + .045);
+      overtone.frequency.setValueAtTime(bodyFreq * 1.74, t);
+      bodyGain.gain.setValueAtTime(.0001, t);
+      bodyGain.gain.exponentialRampToValueAtTime(.42 * force, t + .004);
+      bodyGain.gain.exponentialRampToValueAtTime(.0001, t + .09 + vp.decay * .08);
+      body.connect(bodyGain);
+      overtone.connect(bodyGain);
+      bodyGain.connect(out);
+      body.start(t); overtone.start(t);
+      body.stop(t + tailDur); overtone.stop(t + tailDur);
+
+      noise(t, .09 + vp.decay * .18, out, 1700 + vp.tune * 2600, "bandpass");
+      noise(t + .006, .05 + vp.decay * .12, out, 5200 + vp.grit * 3400, "highpass");
+      click(t, .012, (.22 + vp.grit * .22) * force, out);
+      click(t + .018, .008, .09 * force, out);
+    }
+
+    function engineCount() {
+      return SYNTH_COUNT + SAMPLE_COUNT;
+    }
+
+    function enterSourceMode(voiceIndex) {
+      initAudio();
+      state.sourceMode = voiceIndex;
+      state.selected = voiceIndex;
+      machine.classList.add("source-mode");
+      snapDials();
+      renderScreen();
+      render();
+    }
+
+    function exitSourceMode() {
+      if (state.recording) stopRecording();
+      state.sourceMode = null;
+      machine.classList.remove("source-mode");
+      snapDials();
+      renderScreen();
+    }
+
+    function startRecording() {
+      if (state.recording) return;
+      initAudio();
+      state.recording = true;
+      state.recordChunks = [];
+      machine.classList.add("recording");
+
+      const scriptLen = 4096;
+      navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+        state.mediaStream = stream;
+        const source = state.ctx.createMediaStreamSource(stream);
+        const processor = state.ctx.createScriptProcessor(scriptLen, 1, 1);
+        const startTime = state.ctx.currentTime;
+        processor.onaudioprocess = e => {
+          if (!state.recording) return;
+          const input = e.inputBuffer.getChannelData(0);
+          state.recordChunks.push(new Float32Array(input));
+          // Max ~3 seconds
+          if (state.ctx.currentTime - startTime > 3) stopRecording();
+          else renderScreen();
+        };
+        source.connect(processor);
+        processor.connect(state.ctx.destination); // needed for scriptProcessor to fire
+        state.recorder = { source, processor };
+      }).catch(() => {
+        state.recording = false;
+        machine.classList.remove("recording");
+      });
+    }
+
+    function stopRecording() {
+      if (!state.recording) return;
+      state.recording = false;
+      machine.classList.remove("recording");
+
+      if (state.recorder) {
+        state.recorder.processor.disconnect();
+        state.recorder.source.disconnect();
+        state.recorder = null;
+      }
+      if (state.mediaStream) {
+        state.mediaStream.getTracks().forEach(t => t.stop());
+        state.mediaStream = null;
+      }
+
+      if (state.recordChunks.length > 0) {
+        // Combine chunks into a single AudioBuffer
+        const totalLen = state.recordChunks.reduce((sum, c) => sum + c.length, 0);
+        const buf = state.ctx.createBuffer(1, totalLen, state.ctx.sampleRate);
+        const data = buf.getChannelData(0);
+        let offset = 0;
+        for (const chunk of state.recordChunks) {
+          data.set(chunk, offset);
+          offset += chunk.length;
+        }
+        // Normalize
+        let peak = 0;
+        for (let i = 0; i < data.length; i++) peak = Math.max(peak, Math.abs(data[i]));
+        if (peak > 0.01) {
+          const scale = .9 / peak;
+          for (let i = 0; i < data.length; i++) data[i] *= scale;
+        }
+
+        // Store in next available slot
+        const userSlot = state.nextSampleSlot % USER_SAMPLE_COUNT;
+        const slot = ROM_SAMPLE_COUNT + userSlot;
+        state.sampleBuffers[slot] = buf;
+        state.nextSampleSlot = userSlot + 1;
+
+        // Assign to current voice
+        const vp = state.voiceParams[state.selected];
+        vp.engine = SYNTH_COUNT + slot;
+        vp.sampleStart = 0;
+        vp.sampleEnd = 1;
+        vp.samplePitch = .5;
+      }
+      state.recordChunks = [];
+      snapDials();
+      renderScreen();
+    }
+
+    function render() {
+      matrix.innerHTML = "";
+
+      if (state.sourceMode !== null) {
+        renderSourceGrid();
+      } else {
+        renderSequencerGrid();
+      }
+
+      banks.innerHTML = "";
+      state.banks.forEach((bank, index) => {
+        const b = document.createElement("button");
+        b.className = "bank" + (index === state.activeBank ? " active" : "");
+        b.style.setProperty("--bank-color", bankColors[index]);
+        b.style.setProperty("--bank-turn", `${index * 36 - 20}deg`);
+        b.style.setProperty("--bank-radius", index % 2 ? "24%" : "50%");
+        b.addEventListener("pointerdown", e => {
+          e.preventDefault();
+          loadBank(index);
+        });
+        banks.appendChild(b);
+      });
+
+      renderScreen();
+    }
+
+    function renderSequencerGrid() {
+      voices.forEach((voice, row) => {
+        const wrap = document.createElement("div");
+        wrap.className = "row";
+        wrap.style.setProperty("--c", voice.color);
+        const v = document.createElement("button");
+        v.className = "voice" + (state.selected === row ? " selected" : "");
+        v.style.setProperty("--c", voice.color);
+        v.style.setProperty("--shape", voice.shape);
+        v.addEventListener("pointerdown", e => {
+          e.preventDefault();
+          if (e.altKey) {
+            enterSourceMode(row);
+            return;
+          }
+          state.selected = row;
+          snapDials();
+          playVoice(row);
+          render();
+        });
+        wrap.appendChild(v);
+        state.steps[row].forEach((active, col) => {
+          const s = document.createElement("button");
+          const lockActive = Object.keys(state.locks[row][col]).length > 0;
+          const probability = state.probabilities[row][col];
+          s.className = "step" +
+            (active ? " on" : "") +
+            (state.accents[row][col] ? " accent" : "") +
+            (state.current === col ? " now" : "") +
+            (lockActive ? " locked" : "") +
+            (probability < 1 ? " chance" : "");
+          s.style.setProperty("--chance", probability);
+          s.style.setProperty("--c", voice.color);
+          s.addEventListener("pointerdown", e => {
+            e.preventDefault();
+            if (e.shiftKey) {
+              cycleProbability(row, col);
+            } else if (e.detail > 1 || e.altKey) {
+              toggleAccent(row, col);
+            } else {
+              toggleStep(row, col);
+            }
+          });
+          wrap.appendChild(s);
+        });
+        matrix.appendChild(wrap);
+      });
+    }
+
+    function renderSourceGrid() {
+      const voiceColor = voices[state.sourceMode].color;
+      const vp = state.voiceParams[state.sourceMode];
+      const total = engineCount();
+
+      for (let row = 0; row < 4; row++) {
+        const wrap = document.createElement("div");
+        wrap.className = "row";
+        wrap.style.setProperty("--c", voiceColor);
+
+        // Voice button — pointerdown stays responsive while playback re-renders the grid.
+        const v = document.createElement("button");
+        v.className = "voice" + (state.sourceMode === row ? " selected" : "");
+        v.style.setProperty("--c", voices[row].color);
+        v.style.setProperty("--shape", voices[row].shape);
+        v.addEventListener("pointerdown", e => {
+          e.preventDefault();
+          if (e.altKey && row !== state.sourceMode) {
+            enterSourceMode(row);
+          } else {
+            exitSourceMode();
+            state.selected = row;
+            snapDials();
+            render();
+          }
+        });
+        wrap.appendChild(v);
+
+        // 16 engine/sample slots per row
+        for (let col = 0; col < 16; col++) {
+          const engineIdx = row * 16 + col;
+          const s = document.createElement("button");
+          s.style.setProperty("--c", voiceColor);
+
+          if (engineIdx < SYNTH_COUNT) {
+            // Synth engine slot
+            s.className = "step source-slot synth-slot" + (vp.engine === engineIdx ? " on" : "");
+            s.addEventListener("click", () => {
+              vp.engine = engineIdx;
+              playVoice(state.sourceMode);
+              render();
+            });
+          } else if (engineIdx < SYNTH_COUNT + SAMPLE_COUNT) {
+            // Sample slot
+            const slotIdx = engineIdx - SYNTH_COUNT;
+            const hasSample = !!state.sampleBuffers[slotIdx];
+            const isUserSlot = slotIdx >= ROM_SAMPLE_COUNT;
+            s.className = "step source-slot sample-slot" +
+              (hasSample ? " has-sample" : " empty-slot") +
+              (vp.engine === engineIdx ? " on" : "");
+            s.addEventListener("click", () => {
+              if (hasSample) {
+                vp.engine = engineIdx;
+                playVoice(state.sourceMode);
+                render();
+              }
+            });
+            if (isUserSlot) {
+              // Drag and drop support
+              s.addEventListener("dragover", e => {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = "copy";
+                s.classList.add("drag-over");
+              });
+              s.addEventListener("dragleave", () => s.classList.remove("drag-over"));
+              s.addEventListener("drop", e => {
+                e.preventDefault();
+                s.classList.remove("drag-over");
+                const file = e.dataTransfer.files[0];
+                if (file && file.type.startsWith("audio/")) {
+                  loadAudioFile(file, slotIdx);
+                }
+              });
+            }
+          } else {
+            // Beyond available slots — inactive
+            s.className = "step source-slot inactive-slot";
+          }
+          wrap.appendChild(s);
+        }
+        matrix.appendChild(wrap);
+      }
+    }
+
+    function loadAudioFile(file, slotIdx) {
+      initAudio();
+      const reader = new FileReader();
+      reader.onload = () => {
+        state.ctx.decodeAudioData(reader.result).then(buf => {
+          normalizeBuffer(buf);
+          state.sampleBuffers[slotIdx] = buf;
+          // Auto-assign to current voice if in source mode
+          if (state.sourceMode !== null) {
+            state.voiceParams[state.sourceMode].engine = SYNTH_COUNT + slotIdx;
+            state.voiceParams[state.sourceMode].sampleStart = 0;
+            state.voiceParams[state.sourceMode].sampleEnd = 1;
+            state.voiceParams[state.sourceMode].samplePitch = .5;
+            playVoice(state.sourceMode);
+          }
+          render();
+        });
+      };
+      reader.readAsArrayBuffer(file);
+    }
+
+    function renderScreen() {
+      screenBars.innerHTML = "";
+      screenBars.style.setProperty("--bank-color", bankColors[state.activeBank]);
+      const vi = state.sourceMode !== null ? state.sourceMode : state.selected;
+      const vp = state.voiceParams[vi];
+      const voiceColor = voices[vi].color;
+
+      if (state.sourceMode !== null) {
+        // Source mode: bars 1-2 normal, bars 3-6 merge into waveform preview
+        const globals = [(state.tempo - 70) / 110, state.swing];
+        globals.forEach((level, i) => {
+          const bar = document.createElement("i");
+          bar.className = "screen-bar";
+          bar.appendChild(makeParamGlyph(i, clamp01(level)));
+          screenBars.appendChild(bar);
+        });
+        // Merged preview panel spanning bars 3-6
+        const preview = document.createElement("i");
+        preview.className = "screen-bar source-preview";
+        preview.style.setProperty("--voice-color", voiceColor);
+        preview.style.gridColumn = "3 / 7";
+        preview.appendChild(makeSourcePreview(vp, voiceColor));
+        screenBars.appendChild(preview);
+        return;
+      }
+
+      // Normal mode
+      const levels = [
+        (state.tempo - 70) / 110,
+        state.swing,
+        vp.tune,
+        vp.decay,
+        vp.grit,
+        vp.echo
+      ];
+      levels.forEach((level, i) => {
+        const bar = document.createElement("i");
+        bar.className = "screen-bar";
+        if (i >= 2) {
+          bar.classList.add("voice-tinted");
+          bar.style.setProperty("--voice-color", voiceColor);
+        }
+        const p = Math.min(1, Math.max(0, level));
+        bar.appendChild(makeParamGlyph(i, p));
+        screenBars.appendChild(bar);
+      });
+    }
+
+    function makeSourcePreview(vp, color) {
+      const svg = makeSvg();
+      svg.setAttribute("viewBox", "0 0 200 100");
+      svg.setAttribute("preserveAspectRatio", "none");
+
+      // Border frame
+      addSvg(svg, "rect", { class: "limit", x: 4, y: 4, width: 192, height: 92, rx: 3 });
+
+      // Live recording waveform
+      if (state.recording && state.recordChunks.length > 0) {
+        const allData = state.recordChunks;
+        const totalLen = allData.reduce((s, c) => s + c.length, 0);
+        const maxSamples = state.ctx.sampleRate * 3;
+        const progress = Math.min(1, totalLen / maxSamples);
+        const pts = [];
+        const steps = 120;
+        for (let i = 0; i < steps; i++) {
+          const t = i / (steps - 1);
+          if (t > progress) break;
+          const sampleIdx = Math.floor(t * totalLen);
+          let chunkOffset = 0, val = 0;
+          for (const chunk of allData) {
+            if (sampleIdx < chunkOffset + chunk.length) {
+              val = chunk[sampleIdx - chunkOffset];
+              break;
+            }
+            chunkOffset += chunk.length;
+          }
+          pts.push(`${(8 + t * 184).toFixed(1)},${(50 - val * 38).toFixed(1)}`);
+        }
+        if (pts.length > 1) {
+          addSvg(svg, "polyline", { class: "shape", points: pts.join(" "), fill: "none", style: `stroke: ${color}` });
+        }
+        // Progress bar
+        addSvg(svg, "rect", { x: 8, y: 88, width: Math.round(progress * 184), height: 3, rx: 1, style: `fill: ${color}; opacity: .6` });
+        return svg;
+      }
+
+      if (vp.engine < SYNTH_COUNT) {
+        // Synth engine identity waveform
+        const pts = makeSynthWaveform(vp.engine, vp);
+        addSvg(svg, "polyline", {
+          class: "shape",
+          points: pts,
+          fill: "none",
+          style: `stroke: ${color}`
+        });
+        // Engine position indicator (dots at bottom)
+        const total = engineCount();
+        for (let i = 0; i < Math.min(total, 34); i++) {
+          const x = 14 + (i / Math.max(1, total - 1)) * 172;
+          addSvg(svg, "circle", {
+            cx: x, cy: 92,
+            r: i === vp.engine ? 3 : 1.5,
+            class: i === vp.engine ? "shape fill" : "ghost",
+            style: i === vp.engine ? `fill: ${color}; stroke: ${color}` : ""
+          });
+        }
+      } else {
+        // Sample waveform
+        const slotIndex = vp.engine - SYNTH_COUNT;
+        const buf = state.sampleBuffers[slotIndex];
+        if (buf) {
+          const data = buf.getChannelData(0);
+          const pts = [];
+          const steps = 120;
+          for (let i = 0; i < steps; i++) {
+            const t = i / (steps - 1);
+            const si = Math.floor(t * (data.length - 1));
+            const x = 8 + t * 184;
+            const y = 50 - data[si] * 38;
+            pts.push(`${x.toFixed(1)},${y.toFixed(1)}`);
+          }
+          addSvg(svg, "polyline", { class: "shape", points: pts.join(" "), fill: "none", style: `stroke: ${color}` });
+          // Start/end markers
+          const sx = 8 + vp.sampleStart * 184;
+          const ex = 8 + vp.sampleEnd * 184;
+          addSvg(svg, "line", { x1: sx, y1: 8, x2: sx, y2: 92, class: "shape", style: `stroke: ${color}; opacity: .8` });
+          addSvg(svg, "line", { x1: ex, y1: 8, x2: ex, y2: 92, class: "shape", style: `stroke: ${color}; opacity: .8` });
+          // Highlight active region
+          addSvg(svg, "rect", {
+            x: sx, y: 8, width: Math.max(1, ex - sx), height: 84,
+            style: `fill: ${color}; opacity: .08`, rx: 2
+          });
+        } else {
+          // Empty sample slot
+          addSvg(svg, "line", { class: "ghost", x1: 30, y1: 50, x2: 170, y2: 50 });
+          addSvg(svg, "circle", { class: "ghost", cx: 100, cy: 50, r: 12 });
+        }
+        // Engine position indicator
+        const total = engineCount();
+        for (let i = 0; i < Math.min(total, 34); i++) {
+          const x = 14 + (i / Math.max(1, total - 1)) * 172;
+          addSvg(svg, "circle", {
+            cx: x, cy: 92,
+            r: i === vp.engine ? 3 : 1.5,
+            class: i === vp.engine ? "shape fill" : "ghost",
+            style: i === vp.engine ? `fill: ${color}; stroke: ${color}` : ""
+          });
+        }
+      }
+      return svg;
+    }
+
+    function makeSynthWaveform(engineIndex, vp) {
+      const pts = [];
+      const n = 100;
+      for (let i = 0; i < n; i++) {
+        const t = i / (n - 1);
+        const x = 8 + t * 184;
+        let y = 50;
+        switch (engineIndex) {
+          case 0: // Kick: decaying sine
+            y = 50 - Math.sin(t * 8 + vp.tune * 4) * 36 * Math.exp(-t * 4);
+            break;
+          case 1: // Snare: body knock plus wire tail
+            y = 50 - (
+              Math.sin(t * 22 + vp.tune * 2) * 20 * Math.exp(-t * 8) +
+              Math.sin(t * 74) * 10 * Math.exp(-t * 5) +
+              (Math.random() - .5) * 26 * Math.exp(-t * 4.5)
+            );
+            break;
+          case 2: // Hat: dense high freq hash
+            y = 50 - (Math.random() - .5) * 28 * Math.exp(-t * 8);
+            break;
+          case 3: // Perc: descending triangle blip
+            y = 50 - Math.abs(((t * 16 + vp.tune * 4) % 2) - 1) * 32 * Math.exp(-t * 3.5);
+            break;
+          case 4: // Rim: single sharp spike
+            y = 50 - Math.exp(-Math.pow((t - .08) * 28, 2)) * 40;
+            break;
+          case 5: // Tom: deeper sine decay
+            y = 50 - Math.sin(t * 5 + vp.tune * 3) * 38 * Math.exp(-t * 2.5);
+            break;
+          case 6: // Clap: stacked bursts
+            { const burst = (p, w) => Math.exp(-Math.pow((t - p) * 50, 2)) * w;
+              y = 50 - (burst(.05, 25) + burst(.1, 28) + burst(.15, 22) + burst(.22, 36)) * (Math.random() * .4 + .6); }
+            break;
+          case 7: // Zap: ascending sweep
+            y = 50 - Math.sin(t * t * 80) * 30 * (1 - t * .7);
+            break;
+          case 8: // Cow: dual frequency beating
+            y = 50 - (Math.sin(t * 24) + Math.sin(t * 24 * 1.504)) * 16 * Math.exp(-t * 3);
+            break;
+          case 9: // FM: complex harmonics
+            y = 50 - Math.sin(t * 14 + Math.sin(t * 42) * (3 - t * 8)) * 30 * Math.exp(-t * 3);
+            break;
+        }
+        pts.push(`${x.toFixed(1)},${y.toFixed(1)}`);
+      }
+      return pts.join(" ");
+    }
+
+    function point(cx, cy, r, angle) {
+      const a = (angle - 90) * Math.PI / 180;
+      return `${(cx + Math.cos(a) * r).toFixed(1)},${(cy + Math.sin(a) * r).toFixed(1)}`;
+    }
+
+    function polygonPoints(sides, radius, spin = 0, cx = 50, cy = 50) {
+      return Array.from({ length: sides }, (_, i) => point(cx, cy, radius, spin + i * 360 / sides)).join(" ");
+    }
+
+    function starPoints(points, inner, outer, spin = 0) {
+      return Array.from({ length: points * 2 }, (_, i) => point(50, 50, i % 2 ? inner : outer, spin + i * 180 / points)).join(" ");
+    }
+
+    function polarPath(turns, radius, spin = 0) {
+      const count = 22;
+      return Array.from({ length: count }, (_, i) => {
+        const p = i / (count - 1);
+        const r = radius * p;
+        const a = spin + p * 360 * turns;
+        return `${i ? "L" : "M"}${point(50, 50, r, a)}`;
+      }).join(" ");
+    }
+
+    function makeSvg() {
+      const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      svg.setAttribute("viewBox", "0 0 100 100");
+      svg.setAttribute("aria-hidden", "true");
+      return svg;
+    }
+
+    function addSvg(svg, tag, attrs) {
+      const el = document.createElementNS("http://www.w3.org/2000/svg", tag);
+      Object.entries(attrs).forEach(([key, value]) => el.setAttribute(key, value));
+      svg.appendChild(el);
+      return el;
+    }
+
+    function makeParamGlyph(index, p) {
+      const svg = makeSvg();
+      addSvg(svg, "rect", { class: "limit", x: 14, y: 14, width: 72, height: 72, rx: 4 });
+      if (p <= .015) return svg;
+      if (index === 0) {
+        const sides = 3 + Math.round(p * 9);
+        const radius = 5 + p * 29;
+        addSvg(svg, "polygon", { class: "shape", points: polygonPoints(sides, radius, p * 120) });
+      } else if (index === 1) {
+        const r = 29;
+        if (p >= .985) {
+          addSvg(svg, "circle", { class: "shape", cx: 50, cy: 50, r });
+        } else {
+          const sweep = p * 359;
+          const start = point(50, 50, r, -90);
+          const end = point(50, 50, r, -90 + sweep);
+          addSvg(svg, "path", { class: "shape", d: `M${start} A${r} ${r} 0 ${sweep > 180 ? 1 : 0} 1 ${end}` });
+        }
+      } else if (index === 2) {
+        const teeth = 3 + Math.round(p * 7);
+        addSvg(svg, "polygon", { class: "shape", points: starPoints(teeth, 4 + p * 10, 8 + p * 22, p * 180) });
+      } else if (index === 3) {
+        const height = 3 + p * 62;
+        addSvg(svg, "rect", { class: "shape fill", x: 29, y: 82 - height, width: 42, height, rx: 3 });
+        addSvg(svg, "line", { class: "limit", x1: 25, y1: 18, x2: 75, y2: 18 });
+      } else if (index === 4) {
+        const turns = 0.12 + p * 2.7;
+        addSvg(svg, "path", { class: "shape", d: polarPath(turns, 6 + p * 25, p * 240) });
+      } else {
+        const amp = 2 + p * 22;
+        const turns = 1.1 + p * 1.6;
+        const count = 18;
+        const left = [];
+        const right = [];
+        for (let n = 0; n < count; n++) {
+          const t = n / (count - 1);
+          const y = 18 + t * 64;
+          const wave = Math.sin(t * Math.PI * 2 * turns);
+          left.push(`${n ? "L" : "M"}${(50 - wave * amp).toFixed(1)},${y.toFixed(1)}`);
+          right.push(`${n ? "L" : "M"}${(50 + wave * amp).toFixed(1)},${y.toFixed(1)}`);
+          if (n % 3 === 0) {
+            addSvg(svg, "line", {
+              class: "limit",
+              x1: (50 - wave * amp).toFixed(1),
+              y1: y.toFixed(1),
+              x2: (50 + wave * amp).toFixed(1),
+              y2: y.toFixed(1)
+            });
+          }
+        }
+        addSvg(svg, "path", { class: "shape", d: left.join(" ") });
+        addSvg(svg, "path", { class: "shape", d: right.join(" ") });
+      }
+      return svg;
+    }
+
+    function toggleStep(row, col) {
+      state.steps[row][col] = !state.steps[row][col];
+      if (!state.steps[row][col]) {
+        state.accents[row][col] = false;
+        state.probabilities[row][col] = 1;
+        state.locks[row][col] = {};
+        state.lockTarget = null;
+      } else {
+        state.lockTarget = { row, col, expires: performance.now() + 2500 };
+      }
+      state.selected = row;
+      snapDials();
+      if (state.steps[row][col]) playVoice(row, 0, state.accents[row][col]);
+      storeBank();
+      render();
+    }
+
+    function toggleAccent(row, col) {
+      state.steps[row][col] = true;
+      state.accents[row][col] = !state.accents[row][col];
+      state.lockTarget = { row, col, expires: performance.now() + 2500 };
+      state.selected = row;
+      snapDials();
+      playVoice(row, 0, state.accents[row][col]);
+      storeBank();
+      render();
+    }
+
+    function cycleProbability(row, col) {
+      state.steps[row][col] = true;
+      const options = [1, .75, .5, .25];
+      const current = state.probabilities[row][col];
+      const next = options[(options.findIndex(v => Math.abs(v - current) < .01) + 1) % options.length];
+      state.probabilities[row][col] = next;
+      state.lockTarget = { row, col, expires: performance.now() + 2500 };
+      state.selected = row;
+      snapDials();
+      playVoice(row, 0, state.accents[row][col]);
+      storeBank();
+      render();
+    }
+
+    function pulsePad(index) {
+      const pads = [...document.querySelectorAll(".voice")];
+      if (!pads[index]) return;
+      pads[index].classList.add("selected");
+      window.setTimeout(() => render(), 72);
+    }
+
+    function stepInterval(step) {
+      const beat = 60 / state.tempo / 4;
+      const swingDepth = state.swing * .5;
+      return step % 2 === 0 ? beat * (1 + swingDepth) : beat * (1 - swingDepth);
+    }
+
+    function paramsForStep(row, col) {
+      const locks = state.locks[row][col];
+      return Object.keys(locks).length ? { ...state.voiceParams[row], ...locks } : null;
+    }
+
+    function scheduleStep(step, time) {
+      state.steps.forEach((row, index) => {
+        if (!row[step] || Math.random() > state.probabilities[index][step]) return;
+        playVoice(index, time, state.accents[index][step], paramsForStep(index, step));
+      });
+      if (state.fill && step % 2 === 1) {
+        playVoice(2, time + .03, true);
+        if (step % 4 === 3) playVoice(state.selected, time + .06, true);
+      }
+      const delay = Math.max(0, (time - state.ctx.currentTime) * 1000);
+      const visualTimer = window.setTimeout(() => {
+        state.current = step;
+        render();
+      }, delay);
+      state.visualTimers.push(visualTimer);
+    }
+
+    function scheduler() {
+      while (state.nextStepTime < state.ctx.currentTime + .14) {
+        scheduleStep(state.nextStep, state.nextStepTime);
+        state.nextStepTime += stepInterval(state.nextStep);
+        state.nextStep = (state.nextStep + 1) % 16;
+      }
+      state.timer = window.setTimeout(scheduler, 25);
+    }
+
+    function start() {
+      initAudio();
+      state.ctx.resume();
+      if (state.playing) return;
+      state.playing = true;
+      machine.classList.add("playing");
+      state.nextStep = (state.current + 1) % 16;
+      state.nextStepTime = state.ctx.currentTime + .025;
+      scheduler();
+    }
+
+    function stop() {
+      state.playing = false;
+      machine.classList.remove("playing");
+      window.clearTimeout(state.timer);
+      state.visualTimers.forEach(id => window.clearTimeout(id));
+      state.visualTimers = [];
+      render();
+    }
+
+    function randomize() {
+      state.steps = voices.map((_, row) =>
+        Array.from({ length: 16 }, (_, col) => {
+          const anchor = row === 0 ? col % 4 === 0 : row === 1 ? col % 8 === 4 : false;
+          return anchor || Math.random() < [.13, .16, .34, .18][row];
+        })
+      );
+      state.accents = state.steps.map((row, r) => row.map((on, c) => on && (c + r + Math.floor(Math.random() * 3)) % 5 === 0));
+      state.probabilities = state.steps.map(row => row.map(on => on && Math.random() < .18 ? .5 : 1));
+      state.locks = emptyLockGrid();
+      storeBank();
+      render();
+    }
+
+    function clearAll() {
+      state.steps = voices.map(() => Array(16).fill(false));
+      state.accents = voices.map(() => Array(16).fill(false));
+      state.probabilities = voices.map(() => Array(16).fill(1));
+      state.locks = emptyLockGrid();
+      storeBank();
+      render();
+    }
+
+    function rotateSelected() {
+      const row = state.selected;
+      state.steps[row].unshift(state.steps[row].pop());
+      state.accents[row].unshift(state.accents[row].pop());
+      state.probabilities[row].unshift(state.probabilities[row].pop());
+      state.locks[row].unshift(state.locks[row].pop());
+      storeBank();
+      render();
+    }
+
+    function storeBank() {
+      state.banks[state.activeBank] = {
+        steps: cloneGrid(state.steps),
+        accents: cloneGrid(state.accents),
+        probabilities: cloneGrid(state.probabilities),
+        locks: cloneLockGrid(state.locks),
+        voiceParams: state.voiceParams.map(vp => ({ ...vp }))
+      };
+    }
+
+    function loadBank(index) {
+      storeBank();
+      state.activeBank = index;
+      const bank = state.banks[index];
+      state.steps = cloneGrid(bank.steps);
+      state.accents = cloneGrid(bank.accents);
+      state.probabilities = bank.probabilities ? cloneGrid(bank.probabilities) : voices.map(() => Array(16).fill(1));
+      state.locks = bank.locks ? cloneLockGrid(bank.locks) : emptyLockGrid();
+      if (bank.voiceParams) {
+        state.voiceParams = bank.voiceParams.map(vp => ({ ...vp }));
+      }
+      updateFx();
+      snapDials();
+      render();
+    }
+
+    // In source mode with a sample engine, encoders remap: tune->sampleStart, decay->sampleEnd, grit->samplePitch
+    const sampleDialMap = { tune: "sampleStart", decay: "sampleEnd", grit: "samplePitch" };
+
+    function isSampleEngine(vp) { return vp.engine >= SYNTH_COUNT; }
+
+    function activeLockTarget() {
+      const target = state.lockTarget;
+      if (!target || performance.now() > target.expires) {
+        state.lockTarget = null;
+        return null;
+      }
+      return state.steps[target.row]?.[target.col] ? target : null;
+    }
+
+    function setDial(el, value) {
+      const name = el.dataset.dial;
+      const isGlobal = name === "tempo" || name === "swing";
+      const vi = state.sourceMode !== null ? state.sourceMode : state.selected;
+      const vp = state.voiceParams[vi];
+      const inSampleSource = state.sourceMode !== null && !isGlobal && isSampleEngine(vp) && name in sampleDialMap;
+
+      if (inSampleSource) {
+        const mapped = sampleDialMap[name];
+        const clamped = clamp01(value);
+        vp[mapped] = clamped;
+        const p = clamped;
+        el.style.setProperty("--r", `${-132 + p * 264}deg`);
+        el.style.setProperty("--a", `${p * 74}%`);
+        renderScreen();
+        return;
+      }
+
+      const min = name === "tempo" ? 70 : 0;
+      const max = name === "tempo" ? 180 : 1;
+      const clamped = Math.min(max, Math.max(min, value));
+      if (isGlobal) {
+        state[name] = clamped;
+      } else if (state.sourceMode === null && activeLockTarget()) {
+        const target = activeLockTarget();
+        state.locks[target.row][target.col][name] = clamped;
+        state.lockTarget.expires = performance.now() + 2500;
+        storeBank();
+        render();
+      } else {
+        vp[name] = clamped;
+        updateVoiceFx(vi);
+      }
+      const p = (clamped - min) / (max - min);
+      el.style.setProperty("--r", `${-132 + p * 264}deg`);
+      el.style.setProperty("--a", `${p * 74}%`);
+      renderScreen();
+    }
+
+    function snapDials() {
+      const vi = state.sourceMode !== null ? state.sourceMode : state.selected;
+      const vp = state.voiceParams[vi];
+      const inSampleSource = state.sourceMode !== null && isSampleEngine(vp);
+      document.querySelectorAll('.dial').forEach(dial => {
+        const name = dial.dataset.dial;
+        if (name === "tempo" || name === "swing") return;
+        let val;
+        if (inSampleSource && name in sampleDialMap) {
+          val = vp[sampleDialMap[name]];
+        } else {
+          val = vp[name];
+        }
+        const p = clamp01(val);
+        dial.style.setProperty("--r", `${-132 + p * 264}deg`);
+        dial.style.setProperty("--a", `${p * 74}%`);
+      });
+    }
+
+    document.querySelectorAll("[data-act]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        btn.classList.add("hot");
+        window.setTimeout(() => btn.classList.remove("hot"), 130);
+        // In source mode, mist button triggers recording instead of randomize
+        if (btn.dataset.act === "random" && state.sourceMode !== null) {
+          if (state.recording) stopRecording();
+          else startRecording();
+          return;
+        }
+        if (btn.dataset.act === "play") start();
+        if (btn.dataset.act === "stop") stop();
+        if (btn.dataset.act === "random") randomize();
+        if (btn.dataset.act === "clear") clearAll();
+        if (btn.dataset.act === "shift") rotateSelected();
+      });
+      btn.addEventListener("pointerdown", () => {
+        if (btn.dataset.act === "fill") {
+          state.fill = true;
+          btn.classList.add("hot");
+        }
+      });
+      btn.addEventListener("pointerup", () => {
+        if (btn.dataset.act === "fill") {
+          state.fill = false;
+          btn.classList.remove("hot");
+        }
+      });
+      btn.addEventListener("pointerleave", () => {
+        if (btn.dataset.act === "fill") {
+          state.fill = false;
+          btn.classList.remove("hot");
+        }
+      });
+    });
+
+    document.querySelectorAll(".dial").forEach(dial => {
+      const name = dial.dataset.dial;
+      const isGlobal = name === "tempo" || name === "swing";
+      const startValue = isGlobal ? state[name] : state.voiceParams[state.selected][name];
+      setDial(dial, startValue);
+      let dragging = false;
+      let lastY = 0;
+      const move = y => {
+        const delta = (lastY - y) / 160;
+        lastY = y;
+        const vi = state.sourceMode !== null ? state.sourceMode : state.selected;
+        const vp = state.voiceParams[vi];
+        if (name === "tempo") setDial(dial, state.tempo + delta * 90);
+        else if (name === "swing") setDial(dial, state.swing + delta);
+        else if (state.sourceMode !== null && isSampleEngine(vp) && name in sampleDialMap) {
+          setDial(dial, vp[sampleDialMap[name]] + delta);
+        }
+        else setDial(dial, vp[name] + delta);
+      };
+      dial.addEventListener("pointerdown", e => {
+        dragging = true;
+        lastY = e.clientY;
+        dial.setPointerCapture(e.pointerId);
+      });
+      dial.addEventListener("pointermove", e => {
+        if (dragging) move(e.clientY);
+      });
+      dial.addEventListener("pointerup", () => dragging = false);
+      dial.addEventListener("pointercancel", () => dragging = false);
+      dial.addEventListener("wheel", e => {
+        e.preventDefault();
+        move(lastY + Math.sign(e.deltaY) * 3.5);
+      }, { passive: false });
+    });
+
+    window.addEventListener("pointermove", e => {
+      const x = (e.clientX / window.innerWidth - .5) * 2;
+      const y = (e.clientY / window.innerHeight - .5) * 2;
+      machine.style.setProperty("--tilt-x", `${(x * 2.2).toFixed(2)}deg`);
+      machine.style.setProperty("--tilt-y", `${(-y * 1.4).toFixed(2)}deg`);
+    });
+
+    window.addEventListener("keydown", e => {
+      const keys = "1234qwerasdfzxcv";
+      const i = keys.indexOf(e.key.toLowerCase());
+      if (e.code === "Space") {
+        e.preventDefault();
+        state.playing ? stop() : start();
+      }
+      if (i >= 0) {
+        const row = i % 4;
+        playVoice(row);
+        if (state.playing && state.current >= 0) {
+          state.steps[row][state.current] = true;
+          render();
+        }
+      }
+    });
+
+    render();
+  </script>
+</body>
+</html>
