@@ -2829,6 +2829,20 @@
       opacity: calc(.18 + var(--chance) * .58);
     }
 
+    @media (pointer: fine) {
+      body,
+      button,
+      input,
+      .dial,
+      .control-pad,
+      .glyph-button,
+      .bank,
+      .voice,
+      .step {
+        cursor: none !important;
+      }
+    }
+
     @media (max-width: 760px) {
       body {
         padding: 10px;
