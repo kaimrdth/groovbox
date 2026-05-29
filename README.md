@@ -62,11 +62,20 @@ tempo | swing | tune | decay | grit | echo
 Tempo and swing are global. Tune, decay, grit, and echo are per voice. In sample source mode, the per-voice controls are remapped:
 
 ```text
+slice page
 tune  -> sample start
 decay -> sample end
 grit  -> sample pitch
 echo  -> echo send
+
+envelope page
+tune  -> attack
+decay -> decay
+grit  -> sustain
+echo  -> release
 ```
+
+The blade button toggles between the slice and envelope pages while a sample is selected in source mode. The screen preview changes from waveform slice markers to an ADSR curve.
 
 ## Sequencer
 
@@ -120,6 +129,8 @@ FM
 ```
 
 The ROM bank is generated in code on first audio initialization. It contains kicks, snares, hats, claps, metallic percussion, zaps, and FX hits. User sample slots can be filled by drag-and-drop or microphone recording while in source mode.
+
+Samples support slice controls, pitch, echo send, and ADSR-style one-shot amplitude shaping.
 
 ## Audio Routing
 

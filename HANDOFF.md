@@ -44,9 +44,11 @@ In source mode, the 64-button step matrix becomes a **sample/engine browser**:
 
 Encoders in source mode:
 - Synth engines: encoders work normally (tune, decay, grit, echo)
-- Sample engines: tune→sampleStart, decay→sampleEnd, grit→samplePitch, echo stays as echo
+- Sample engines have two latched pages toggled by the blade/shift button:
+  - Slice page: tune→sampleStart, decay→sampleEnd, grit→samplePitch, echo→echo send
+  - Envelope page: tune→sampleAttack, decay→sampleDecay, grit→sampleSustain, echo→sampleRelease
 
-The screen morphs: bars 3–6 merge into a single wide waveform preview showing either a synth identity waveform or a recorded sample waveform with start/end markers.
+The screen morphs: bars 3–6 merge into a single wide preview showing either a synth identity waveform, a sample waveform with start/end markers, or an ADSR curve over the sample waveform.
 
 Exit source mode by: clicking a voice button, or Alt+clicking the same voice again.
 
@@ -68,6 +70,16 @@ Per-step state now includes:
 - `locks[row][col]` for per-step overrides of tune, decay, grit, and echo.
 
 Banks persist steps, accents, probabilities, locks, and voice parameters.
+
+Sample voice parameters include slice controls and ADSR-style one-shot shaping:
+- `sampleStart`
+- `sampleEnd`
+- `samplePitch`
+- `sampleAttack`
+- `sampleDecay`
+- `sampleSustain`
+- `sampleRelease`
+- `samplePage`
 
 The screen above the encoders shows six abstract SVG shape indicators, one per encoder. These are not progress bars. They map knob values to geometric properties like vertex count, arc completion, star complexity, bounded fill, spiral turns, and helix spread.
 
@@ -114,7 +126,8 @@ When a voice's engine points to a sample slot (≥10):
 - Creates AudioBufferSourceNode
 - Reads sampleStart/sampleEnd for slice boundaries
 - samplePitch controls playbackRate (0.25x–4x range)
-- Envelope, grit, and echo still apply on top
+- Applies a one-shot ADSR gain envelope to the sample
+- Grit and echo still apply on top
 
 ## Color System
 
