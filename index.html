@@ -2797,6 +2797,9 @@
     .machine {
       --tilt-x: 0deg;
       --tilt-y: 0deg;
+      --glass-x: 30%;
+      --glass-y: 0%;
+      --glass-sweep: 118deg;
       transform: rotateX(calc(8deg + var(--tilt-y))) rotateY(var(--tilt-x)) rotateZ(-1.2deg);
       transition: transform .18s ease-out;
     }
@@ -3016,10 +3019,11 @@
 
     .orbital::after {
       background:
-        linear-gradient(118deg, transparent 0 45%, rgba(255,255,255,.055) 48%, transparent 54%),
-        radial-gradient(circle at 30% 0%, rgba(255,255,255,.045), transparent 36%);
+        linear-gradient(var(--glass-sweep), transparent 0 43%, rgba(255,255,255,.058) 48%, transparent 55%),
+        radial-gradient(circle at var(--glass-x) var(--glass-y), rgba(255,255,255,.05), transparent 38%);
       mix-blend-mode: screen;
       opacity: .55;
+      transition: opacity .18s ease-out;
     }
 
     .screen-bar {
@@ -4744,6 +4748,9 @@
       const y = (e.clientY / window.innerHeight - .5) * 2;
       machine.style.setProperty("--tilt-x", `${(x * 2.2).toFixed(2)}deg`);
       machine.style.setProperty("--tilt-y", `${(-y * 1.4).toFixed(2)}deg`);
+      machine.style.setProperty("--glass-x", `${(30 - x * 18).toFixed(1)}%`);
+      machine.style.setProperty("--glass-y", `${(2 + y * 13).toFixed(1)}%`);
+      machine.style.setProperty("--glass-sweep", `${(118 + x * 7 - y * 3).toFixed(1)}deg`);
       if (cursorOrb && e.pointerType !== "touch") {
         cursorOrb.classList.add("visible");
         cursorOrb.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%)`;
