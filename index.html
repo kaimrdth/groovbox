@@ -3240,6 +3240,38 @@
     const screenBars = document.getElementById("screenBars");
     const cursorOrb = document.getElementById("cursorOrb");
 
+    function debugLog(type, detail = {}) {
+      const entry = {
+        type,
+        detail,
+        time: new Date().toISOString()
+      };
+      try {
+        const prior = JSON.parse(localStorage.getItem("dawsonLogs") || "[]");
+        prior.push(entry);
+        localStorage.setItem("dawsonLogs", JSON.stringify(prior.slice(-80)));
+      } catch {}
+      console.log("[dawson]", type, detail);
+    }
+
+    window.dawsonDebug = () => {
+      try { return JSON.parse(localStorage.getItem("dawsonLogs") || "[]"); }
+      catch { return []; }
+    };
+
+    window.dawsonClearDebug = () => localStorage.removeItem("dawsonLogs");
+    window.addEventListener("error", e => debugLog("error", {
+      message: e.message,
+      source: e.filename,
+      line: e.lineno,
+      column: e.colno,
+      stack: e.error?.stack
+    }));
+    window.addEventListener("unhandledrejection", e => debugLog("unhandledrejection", {
+      reason: e.reason?.message || String(e.reason),
+      stack: e.reason?.stack
+    }));
+
     function cloneGrid(grid) {
       return grid.map(row => row.slice());
     }
@@ -4456,17 +4488,28 @@
     }
 
     function scheduler() {
-      while (state.nextStepTime < state.ctx.currentTime + .14) {
-        scheduleStep(state.nextStep, state.nextStepTime);
-        state.nextStepTime += stepInterval(state.nextStep);
-        state.nextStep = (state.nextStep + 1) % 16;
+      try {
+        while (state.nextStepTime < state.ctx.currentTime + .14) {
+          scheduleStep(state.nextStep, state.nextStepTime);
+          state.nextStepTime += stepInterval(state.nextStep);
+          state.nextStep = (state.nextStep + 1) % 16;
+        }
+      } catch (error) {
+        debugLog("scheduler-error", { message: error.message, stack: error.stack });
+        stop();
+        return;
       }
       state.timer = window.setTimeout(scheduler, 25);
     }
 
     function start() {
       initAudio();
-      state.ctx.resume();
+      debugLog("start", { ctxState: state.ctx.state, current: state.current, mixerLevels: state.mixerLevels, mutes: state.mutes, solos: state.solos });
+      state.ctx.resume().then(() => {
+        debugLog("audio-resume", { ctxState: state.ctx.state });
+      }).catch(error => {
+        debugLog("audio-resume-error", { message: error.message, stack: error.stack });
+      });
       if (state.playing) return;
       state.playing = true;
       machine.classList.add("playing");
@@ -4748,9 +4791,6 @@
       const y = (e.clientY / window.innerHeight - .5) * 2;
       machine.style.setProperty("--tilt-x", `${(x * 2.2).toFixed(2)}deg`);
       machine.style.setProperty("--tilt-y", `${(-y * 1.4).toFixed(2)}deg`);
-      machine.style.setProperty("--glass-x", `${(30 - x * 18).toFixed(1)}%`);
-      machine.style.setProperty("--glass-y", `${(2 + y * 13).toFixed(1)}%`);
-      machine.style.setProperty("--glass-sweep", `${(118 + x * 7 - y * 3).toFixed(1)}deg`);
       if (cursorOrb && e.pointerType !== "touch") {
         cursorOrb.classList.add("visible");
         cursorOrb.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%)`;
