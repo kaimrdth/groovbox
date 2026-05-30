@@ -15,6 +15,8 @@ Core workflow:
 - Current playhead column is shown by white illumination on the step buttons themselves.
 - Four pattern banks, each with its own LED color.
 - Active bank color also drives the six geometric LED-screen indicators.
+- Blade/shift toggles mixer mode in normal operation.
+- Alt+blade/shift rotates the selected pattern row.
 
 ## Controls
 
@@ -27,6 +29,20 @@ The six rotary encoders follow an Elektron-style workflow:
 - **Echo** — per-voice (delay send level)
 
 Selecting a voice (clicking the voice button on the left of a step row) snaps encoders 3–6 to that voice's stored parameter values. The four per-voice screen indicators tint to the selected voice's color.
+
+### Mixer Mode
+
+**Blade/shift button** toggles mixer mode when not in source mode.
+
+In mixer mode:
+- Encoders 1–2 remain tempo and swing.
+- Encoder 3 controls voice 1 level.
+- Encoder 4 controls voice 2 level.
+- Encoder 5 controls voice 3 level.
+- Encoder 6 controls voice 4 level.
+- Click a row voice button to toggle mute.
+- Shift-click or Alt-click a row voice button to toggle solo.
+- Muted rows dim; soloed rows show a stronger voice-color indicator.
 
 ### Source Mode (Alt+click voice button)
 
@@ -69,7 +85,7 @@ Per-step state now includes:
 - `probabilities[row][col]` for chance-based triggering.
 - `locks[row][col]` for per-step overrides of tune, decay, grit, and echo.
 
-Banks persist steps, accents, probabilities, locks, and voice parameters.
+Banks persist steps, accents, probabilities, locks, mixer levels, mutes, solos, and voice parameters.
 
 Sample voice parameters include slice controls and ADSR-style one-shot shaping:
 - `sampleStart`

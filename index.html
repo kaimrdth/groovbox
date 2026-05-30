@@ -2829,6 +2829,24 @@
       opacity: calc(.18 + var(--chance) * .58);
     }
 
+    .mixer-mode .row.muted .step,
+    .mixer-mode .voice.muted {
+      opacity: .42;
+      filter: saturate(.42) brightness(.72);
+    }
+
+    .mixer-mode .voice.soloed::before {
+      background: var(--c);
+      clip-path: polygon(50% 3%,64% 36%,98% 36%,71% 57%,82% 92%,50% 72%,18% 92%,29% 57%,2% 36%,36% 36%);
+      filter: saturate(.8) brightness(.92);
+      box-shadow: 0 0 7px color-mix(in srgb, var(--c), transparent 42%);
+    }
+
+    .mixer-mode .row.soloed .step.on::before {
+      filter: saturate(.8) brightness(.86);
+      box-shadow: 0 0 5px color-mix(in srgb, var(--c), transparent 55%);
+    }
+
     @media (pointer: fine) {
       body,
       button,
@@ -2977,6 +2995,10 @@
       selected: 0,
       activeBank: 0,
       fill: false,
+      mixerMode: false,
+      mixerLevels: voices.map(() => .82),
+      mutes: voices.map(() => false),
+      solos: voices.map(() => false),
       current: -1,
       nextStep: 0,
       nextStepTime: 0,
@@ -3058,7 +3080,16 @@
         echo:  clamp01(bp.echo  + seed * .03 * (i % 2 ? 1 : -1)),
         ...sampleDefaults()
       }));
-      return { steps, accents, probabilities, locks, voiceParams };
+      return {
+        steps,
+        accents,
+        probabilities,
+        locks,
+        mixerLevels: voices.map(() => .82),
+        mutes: voices.map(() => false),
+        solos: voices.map(() => false),
+        voiceParams
+      };
     }
 
     state.banks = [0, 1, 2, 3].map(makeBank);
@@ -3067,6 +3098,9 @@
       accents: cloneGrid(state.accents),
       probabilities: cloneGrid(state.probabilities),
       locks: cloneLockGrid(state.locks),
+      mixerLevels: state.mixerLevels.slice(),
+      mutes: state.mutes.slice(),
+      solos: state.solos.slice(),
       voiceParams: state.voiceParams.map(normalizeVoiceParams)
     };
 
@@ -3133,6 +3167,12 @@
       if (state.echoSends[i]) {
         state.echoSends[i].gain.setTargetAtTime(vp.echo * .42, state.ctx.currentTime, .02);
       }
+    }
+
+    function voiceAudible(index) {
+      const soloed = state.solos.some(Boolean);
+      if (soloed) return state.solos[index];
+      return !state.mutes[index];
     }
 
     function seeded(seed) {
@@ -3394,7 +3434,7 @@
       const baseDecay = [.42, .24, .08, .34, .03, .52, .14, .1, .08, .18];
       const di = Math.min(vp.engine, baseDecay.length - 1);
       const decay = baseDecay[di] * (.7 + vp.decay * .9);
-      const out = envGain(t, .74 * force, decay);
+      const out = envGain(t, .74 * force * state.mixerLevels[index], decay);
       if (lockedParams && state.ctx) {
         const shaper = state.ctx.createWaveShaper();
         shaper.oversample = "2x";
@@ -3575,6 +3615,7 @@
 
     function render() {
       matrix.innerHTML = "";
+      machine.classList.toggle("mixer-mode", state.mixerMode);
 
       if (state.sourceMode !== null) {
         renderSourceGrid();
@@ -3602,14 +3643,33 @@
     function renderSequencerGrid() {
       voices.forEach((voice, row) => {
         const wrap = document.createElement("div");
-        wrap.className = "row";
+        wrap.className = "row" +
+          (state.mixerMode ? " mixer-row" : "") +
+          (state.mutes[row] ? " muted" : "") +
+          (state.solos[row] ? " soloed" : "");
         wrap.style.setProperty("--c", voice.color);
         const v = document.createElement("button");
-        v.className = "voice" + (state.selected === row ? " selected" : "");
+        v.className = "voice" +
+          (state.selected === row ? " selected" : "") +
+          (state.mutes[row] ? " muted" : "") +
+          (state.solos[row] ? " soloed" : "");
         v.style.setProperty("--c", voice.color);
         v.style.setProperty("--shape", voice.shape);
         v.addEventListener("pointerdown", e => {
           e.preventDefault();
+          if (state.mixerMode) {
+            if (e.shiftKey || e.altKey) {
+              state.solos[row] = !state.solos[row];
+            } else {
+              state.mutes[row] = !state.mutes[row];
+              if (state.mutes[row]) state.solos[row] = false;
+            }
+            state.selected = row;
+            storeBank();
+            snapDials();
+            render();
+            return;
+          }
           if (e.altKey) {
             enterSourceMode(row);
             return;
@@ -3774,6 +3834,22 @@
         preview.style.gridColumn = "3 / 7";
         preview.appendChild(makeSourcePreview(vp, voiceColor));
         screenBars.appendChild(preview);
+        return;
+      }
+
+      if (state.mixerMode) {
+        const levels = [(state.tempo - 70) / 110, state.swing, ...state.mixerLevels];
+        levels.forEach((level, i) => {
+          const bar = document.createElement("i");
+          bar.className = "screen-bar";
+          if (i >= 2) {
+            const vi = i - 2;
+            bar.classList.add("voice-tinted");
+            bar.style.setProperty("--voice-color", voices[vi].color);
+          }
+          bar.appendChild(makeParamGlyph(i, clamp01(level)));
+          screenBars.appendChild(bar);
+        });
         return;
       }
 
@@ -4148,12 +4224,12 @@
 
     function scheduleStep(step, time) {
       state.steps.forEach((row, index) => {
-        if (!row[step] || Math.random() > state.probabilities[index][step]) return;
+        if (!voiceAudible(index) || !row[step] || Math.random() > state.probabilities[index][step]) return;
         playVoice(index, time, state.accents[index][step], paramsForStep(index, step));
       });
       if (state.fill && step % 2 === 1) {
-        playVoice(2, time + .03, true);
-        if (step % 4 === 3) playVoice(state.selected, time + .06, true);
+        if (voiceAudible(2)) playVoice(2, time + .03, true);
+        if (step % 4 === 3 && voiceAudible(state.selected)) playVoice(state.selected, time + .06, true);
       }
       const delay = Math.max(0, (time - state.ctx.currentTime) * 1000);
       const visualTimer = window.setTimeout(() => {
@@ -4202,6 +4278,8 @@
       state.accents = state.steps.map((row, r) => row.map((on, c) => on && (c + r + Math.floor(Math.random() * 3)) % 5 === 0));
       state.probabilities = state.steps.map(row => row.map(on => on && Math.random() < .18 ? .5 : 1));
       state.locks = emptyLockGrid();
+      state.mutes = voices.map(() => false);
+      state.solos = voices.map(() => false);
       storeBank();
       render();
     }
@@ -4211,6 +4289,8 @@
       state.accents = voices.map(() => Array(16).fill(false));
       state.probabilities = voices.map(() => Array(16).fill(1));
       state.locks = emptyLockGrid();
+      state.mutes = voices.map(() => false);
+      state.solos = voices.map(() => false);
       storeBank();
       render();
     }
@@ -4235,13 +4315,25 @@
       return true;
     }
 
+    function toggleMixerMode() {
+      if (state.sourceMode !== null) return false;
+      state.mixerMode = !state.mixerMode;
+      state.lockTarget = null;
+      snapDials();
+      render();
+      return true;
+    }
+
     function storeBank() {
       state.banks[state.activeBank] = {
         steps: cloneGrid(state.steps),
         accents: cloneGrid(state.accents),
         probabilities: cloneGrid(state.probabilities),
         locks: cloneLockGrid(state.locks),
-        voiceParams: state.voiceParams.map(vp => ({ ...vp }))
+        mixerLevels: state.mixerLevels.slice(),
+        mutes: state.mutes.slice(),
+        solos: state.solos.slice(),
+        voiceParams: state.voiceParams.map(normalizeVoiceParams)
       };
     }
 
@@ -4253,6 +4345,9 @@
       state.accents = cloneGrid(bank.accents);
       state.probabilities = bank.probabilities ? cloneGrid(bank.probabilities) : voices.map(() => Array(16).fill(1));
       state.locks = bank.locks ? cloneLockGrid(bank.locks) : emptyLockGrid();
+      state.mixerLevels = bank.mixerLevels ? bank.mixerLevels.slice() : voices.map(() => .82);
+      state.mutes = bank.mutes ? bank.mutes.slice() : voices.map(() => false);
+      state.solos = bank.solos ? bank.solos.slice() : voices.map(() => false);
       if (bank.voiceParams) {
         state.voiceParams = bank.voiceParams.map(normalizeVoiceParams);
       }
@@ -4264,6 +4359,7 @@
     // In sample source mode, encoders switch between slice and envelope pages.
     const sampleSliceDialMap = { tune: "sampleStart", decay: "sampleEnd", grit: "samplePitch" };
     const sampleEnvDialMap = { tune: "sampleAttack", decay: "sampleDecay", grit: "sampleSustain", echo: "sampleRelease" };
+    const mixerDialMap = { tune: 0, decay: 1, grit: 2, echo: 3 };
 
     function isSampleEngine(vp) { return vp.engine >= SYNTH_COUNT; }
 
@@ -4287,6 +4383,7 @@
       const vp = state.voiceParams[vi];
       const sampleDialMap = sampleDialMapFor(vp);
       const inSampleSource = state.sourceMode !== null && !isGlobal && isSampleEngine(vp) && name in sampleDialMap;
+      const inMixer = state.mixerMode && state.sourceMode === null && !isGlobal && name in mixerDialMap;
 
       if (inSampleSource) {
         const mapped = sampleDialMap[name];
@@ -4295,6 +4392,17 @@
         const p = clamped;
         el.style.setProperty("--r", `${-132 + p * 264}deg`);
         el.style.setProperty("--a", `${p * 74}%`);
+        renderScreen();
+        return;
+      }
+
+      if (inMixer) {
+        const track = mixerDialMap[name];
+        const clamped = clamp01(value);
+        state.mixerLevels[track] = clamped;
+        el.style.setProperty("--r", `${-132 + clamped * 264}deg`);
+        el.style.setProperty("--a", `${clamped * 74}%`);
+        storeBank();
         renderScreen();
         return;
       }
@@ -4329,7 +4437,9 @@
         const name = dial.dataset.dial;
         if (name === "tempo" || name === "swing") return;
         let val;
-        if (inSampleSource && name in sampleDialMap) {
+        if (state.mixerMode && state.sourceMode === null && name in mixerDialMap) {
+          val = state.mixerLevels[mixerDialMap[name]];
+        } else if (inSampleSource && name in sampleDialMap) {
           val = vp[sampleDialMap[name]];
         } else {
           val = vp[name];
@@ -4341,7 +4451,7 @@
     }
 
     document.querySelectorAll("[data-act]").forEach(btn => {
-      btn.addEventListener("click", () => {
+      btn.addEventListener("click", e => {
         btn.classList.add("hot");
         window.setTimeout(() => btn.classList.remove("hot"), 130);
         // In source mode, mist button triggers recording instead of randomize
@@ -4354,7 +4464,10 @@
         if (btn.dataset.act === "stop") stop();
         if (btn.dataset.act === "random") randomize();
         if (btn.dataset.act === "clear") clearAll();
-        if (btn.dataset.act === "shift" && !toggleSamplePage()) rotateSelected();
+        if (btn.dataset.act === "shift" && !toggleSamplePage()) {
+          if (state.sourceMode === null && !e.altKey) toggleMixerMode();
+          else rotateSelected();
+        }
       });
       btn.addEventListener("pointerdown", () => {
         if (btn.dataset.act === "fill") {
@@ -4390,6 +4503,9 @@
         const vp = state.voiceParams[vi];
         if (name === "tempo") setDial(dial, state.tempo + delta * 90);
         else if (name === "swing") setDial(dial, state.swing + delta);
+        else if (state.mixerMode && state.sourceMode === null && name in mixerDialMap) {
+          setDial(dial, state.mixerLevels[mixerDialMap[name]] + delta);
+        }
         else if (state.sourceMode !== null && isSampleEngine(vp) && name in sampleDialMapFor(vp)) {
           setDial(dial, vp[sampleDialMapFor(vp)[name]] + delta);
         }

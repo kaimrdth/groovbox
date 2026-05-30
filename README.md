@@ -49,6 +49,8 @@ step button                 toggle step
 Alt / double-click step     toggle accent
 Shift-click step            cycle trigger probability
 touch step, then turn knob  create a parameter lock
+blade button                toggle mixer mode
+Alt + blade button          rotate selected pattern row
 hover knob + wheel          fine adjustment
 drag knob vertically        coarse adjustment
 ```
@@ -77,6 +79,22 @@ echo  -> release
 
 The blade button toggles between the slice and envelope pages while a sample is selected in source mode. The screen preview changes from waveform slice markers to an ADSR curve.
 
+In mixer mode, the four right encoders become track levels:
+
+```text
+tune  -> voice 1 level
+decay -> voice 2 level
+grit  -> voice 3 level
+echo  -> voice 4 level
+```
+
+In mixer mode, row voice buttons change role:
+
+```text
+voice button           toggle mute
+Shift / Alt + voice    toggle solo
+```
+
 ## Sequencer
 
 The sequencer has four voices and sixteen steps per voice. Playback uses a Web Audio lookahead scheduler: notes are scheduled against `AudioContext.currentTime`, while the visual playhead is updated separately.
@@ -99,6 +117,9 @@ steps
 accents
 probabilities
 parameter locks
+track levels
+mutes
+solos
 voice parameters
 ```
 
