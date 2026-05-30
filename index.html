@@ -3849,7 +3849,7 @@
             bar.classList.add("voice-tinted");
             bar.style.setProperty("--voice-color", voices[vi].color);
           }
-          bar.appendChild(makeParamGlyph(i, clamp01(level)));
+          bar.appendChild(makeMeterGlyph(clamp01(level)));
           screenBars.appendChild(bar);
         });
         return;
@@ -4106,6 +4106,18 @@
       Object.entries(attrs).forEach(([key, value]) => el.setAttribute(key, value));
       svg.appendChild(el);
       return el;
+    }
+
+    function makeMeterGlyph(p) {
+      const svg = makeSvg();
+      const height = Math.max(1, p * 66);
+      addSvg(svg, "rect", { class: "limit", x: 22, y: 14, width: 56, height: 72, rx: 4 });
+      addSvg(svg, "line", { class: "ghost", x1: 30, y1: 68, x2: 70, y2: 68 });
+      addSvg(svg, "line", { class: "ghost", x1: 30, y1: 50, x2: 70, y2: 50 });
+      addSvg(svg, "line", { class: "ghost", x1: 30, y1: 32, x2: 70, y2: 32 });
+      addSvg(svg, "rect", { class: "shape fill", x: 34, y: 82 - height, width: 32, height, rx: 3 });
+      addSvg(svg, "line", { class: "shape", x1: 28, y1: 82 - height, x2: 72, y2: 82 - height });
+      return svg;
     }
 
     function makeParamGlyph(index, p) {
