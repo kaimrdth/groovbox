@@ -3170,6 +3170,7 @@
     }
 
     function voiceAudible(index) {
+      if (state.mixerLevels[index] <= .001) return false;
       const soloed = state.solos.some(Boolean);
       if (soloed) return state.solos[index];
       return !state.mutes[index];
@@ -3291,8 +3292,9 @@
 
     function envGain(t, peak, decay) {
       const g = state.ctx.createGain();
+      const safePeak = Math.max(.0001, peak);
       g.gain.setValueAtTime(.0001, t);
-      g.gain.exponentialRampToValueAtTime(peak, t + .008);
+      g.gain.exponentialRampToValueAtTime(safePeak, t + .008);
       g.gain.exponentialRampToValueAtTime(.0001, t + decay);
       return g;
     }
